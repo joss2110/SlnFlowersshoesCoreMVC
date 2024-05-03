@@ -1,0 +1,137 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.ColoresVista
+
+@{
+    ViewData["Title"] = "Colores";
+}
+
+<h1>Colores</h1>
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+
+<button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#CrearColor">
+    <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i>
+</button>
+
+<div class="modal fade" id="CrearColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Agregar" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Color" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Color" class="form-control" />
+                                <span asp-validation-for="NuevoColor.Color" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Agregar" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditarColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Editar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Idcolor" class="control-label">Codigo</label>
+                                <input asp-for="NuevoColor.Idcolor" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Idcolor" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Color" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Color" class="form-control" />
+                                <span asp-validation-for="NuevoColor.Color" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Editar" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Código
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Estado
+            </th>
+            <th class="text-center">
+                Editar
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listaColores)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Idcolor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td class="text-center">
+
+                    @Html.ActionLink("", "Colores", new { id = item.Idcolor }, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.abrirModal)
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EditarColor').modal('show');
+            }, 500);
+        });
+    </script>
+}
