@@ -4,11 +4,17 @@
     ViewData["Title"] = "Colores";
 }
 
-<h1>Colores</h1>
+<div class="d-flex justify-content-between">
+    <h3>Mantenimiento Colores</h3>
+    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#CrearColor">
+        <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; Nuevo Color
+    </button>
+</div>
+
 
 @if (TempData["mensaje"] != null)
 {
-    <div class="alert alert-info alert-dismissible fade show my-3" role="alert">
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
         <strong>@TempData["mensaje"]</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -17,15 +23,14 @@
 <hr />
 
 
-<button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#CrearColor">
-    <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i>
-</button>
+
 
 <div class="modal fade" id="CrearColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar color</h5>
+                
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -40,7 +45,7 @@
                             </div>
                             
                             <div class="form-group pt-3">
-                                <input type="submit" value="Agregar" class="btn btn-primary" />
+                                <input type="submit" value="Agregar" class="btn bgRosa w-100" />
                             </div>
                         </form>
                     </div>
@@ -50,12 +55,12 @@
     </div>
 </div>
 
-<div class="modal fade" id="EditarColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="EditarColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button id="btn-close-editar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -75,7 +80,7 @@
                             </div>
 
                             <div class="form-group pt-3">
-                                <input type="submit" value="Editar" class="btn btn-primary" />
+                                <input type="submit" value="Editar" class="btn bgRosa w-100" />
                             </div>
                         </form>
                     </div>
@@ -132,6 +137,9 @@
             setTimeout(function () {
                 $('#EditarColor').modal('show');
             }, 500);
+            $('#btn-close-editar').on('click', function () {
+                window.location.href = '/Colores/Colores';
+            });
         });
     </script>
 }
