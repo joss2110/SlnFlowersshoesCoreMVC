@@ -90,6 +90,7 @@
     </div>
 </div>
 
+<!--filtro-->
 
 <table class="table">
     <thead>
@@ -105,6 +106,9 @@
             </th>
             <th class="text-center">
                 Editar
+            </th>
+            <th class="text-center">
+                Eliminar
             </th>
         </tr>
     </thead>
@@ -122,8 +126,17 @@
                     @Html.DisplayFor(modelItem => item.Estado)
                 </td>
                 <td class="text-center">
-
                     @Html.ActionLink("", "Colores", new { id = item.Idcolor }, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
+                </td>
+                <td class="text-center">
+                    @if (item.Estado == "Activo")
+                    {
+                        @Html.ActionLink("", "Colores", new { id = item.Idcolor }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("", "Colores", new { id = item.Idcolor }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
+                    }
                 </td>
             </tr>
         }
