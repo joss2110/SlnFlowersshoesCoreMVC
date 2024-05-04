@@ -1,4 +1,12 @@
+using FlowersshoesCoreMVC.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var conexion = builder.Configuration.GetConnectionString("cn1");
+
+builder.Services.AddDbContext<flowersshoesContext>(
+    opt => opt.UseSqlServer(conexion));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
