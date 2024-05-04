@@ -64,12 +64,35 @@ namespace FlowersshoesCoreMVC.Controllers
             return cadena;
         }
 
+        public async Task<string> EliminarRestaurarColor(int id, int option)
+        {
+            string cadena = string.Empty;
+
+            using (var httpClient = new HttpClient())
+            {
+                if (option == 1)
+                {
+                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Colores/EliminarColor/{id}");
+                    cadena = await respuesta.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Colores/RestaurarColor/{id}");
+                    cadena = await respuesta.Content.ReadAsStringAsync();
+                }
+            }
+
+            return cadena;
+        }
+
+
+
         [HttpGet]
-        public async Task<IActionResult> Colores(int id)
+        public async Task<IActionResult> Colores(int id,string accion)
         {
             lista = await GetColores();
             ColoresVista viewmodel;
-            ViewBag.abrirModal = false;
+            ViewBag.abrirModal = "No";
 
             if (id == 0)
             {
@@ -86,8 +109,10 @@ namespace FlowersshoesCoreMVC.Controllers
                     NuevoColor = lista.Find(c => c.Idcolor == id)!,
                     listaColores = lista
                 };
-                ViewBag.abrirModal = true;
+                ViewBag.abrirModal = accion;
             }
+
+            
 
             return View(viewmodel);
         }
@@ -108,7 +133,7 @@ namespace FlowersshoesCoreMVC.Controllers
                 }
                 else
                 {
-                    TempData["mensaje"] = "No se pudo agregar un nuevo Registro, intentalo nuevamente";
+                    TempData["mensaje"] = "No se pudo Agregar un nuevo Registro, intentalo nuevamente";
                 }
             }
             catch (Exception ex)
@@ -143,7 +168,77 @@ namespace FlowersshoesCoreMVC.Controllers
                 }
                 else
                 {
-                    TempData["mensaje"] = "No se pudo agregar un nuevo Registro, intentalo nuevamente";
+                    TempData["mensaje"] = "No se pudo Editar el Registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            lista = await GetColores();
+
+            var viewmodel = new ColoresVista
+            {
+                NuevoColor = new TbColores(),
+                listaColores = lista
+            };
+
+            return View("Colores", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(ColoresVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    TbColores nuevoColor = model.NuevoColor;
+
+                    TempData["mensaje"] = await EliminarRestaurarColor(model.NuevoColor.Idcolor,1);
+
+                    return RedirectToAction(nameof(Colores));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo Eliminar el Registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            lista = await GetColores();
+
+            var viewmodel = new ColoresVista
+            {
+                NuevoColor = new TbColores(),
+                listaColores = lista
+            };
+
+            return View("Colores", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restaurar(ColoresVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    TbColores nuevoColor = model.NuevoColor;
+
+                    TempData["mensaje"] = await EliminarRestaurarColor(model.NuevoColor.Idcolor, 2);
+
+                    return RedirectToAction(nameof(Colores));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo Restaurar el Registro, intentalo nuevamente";
                 }
             }
             catch (Exception ex)
