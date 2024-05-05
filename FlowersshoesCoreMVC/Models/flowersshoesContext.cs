@@ -17,7 +17,7 @@ namespace FlowersshoesCoreMVC.Models
         }
 
         public virtual DbSet<TbCliente> TbClientes { get; set; } = null!;
-        public virtual DbSet<TbColore> TbColores { get; set; } = null!;
+        public virtual DbSet<TbColores> TbColores { get; set; } = null!;
         public virtual DbSet<TbDetalleIngreso> TbDetalleIngresos { get; set; } = null!;
         public virtual DbSet<TbDetalleVenta> TbDetalleVentas { get; set; } = null!;
         public virtual DbSet<TbIngreso> TbIngresos { get; set; } = null!;
@@ -84,7 +84,7 @@ namespace FlowersshoesCoreMVC.Models
                     .HasColumnName("tipodocumento");
             });
 
-            modelBuilder.Entity<TbColore>(entity =>
+            modelBuilder.Entity<TbColores>(entity =>
             {
                 entity.HasKey(e => e.Idcolor)
                     .HasName("PK__tb_color__3F9EFF9C88984055");

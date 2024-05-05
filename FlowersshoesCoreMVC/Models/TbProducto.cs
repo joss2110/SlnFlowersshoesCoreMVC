@@ -22,7 +22,7 @@ namespace FlowersshoesCoreMVC.Models
         public string? Descripcion { get; set; }
         public string Estado { get; set; } = null!;
 
-        public virtual TbColore IdcolorNavigation { get; set; } = null!;
+        public virtual TbColores IdcolorNavigation { get; set; } = null!;
         public virtual TbTalla IdtallaNavigation { get; set; } = null!;
         public virtual ICollection<TbStock> TbStocks { get; set; }
     }

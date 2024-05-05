@@ -1,0 +1,313 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.ColoresVista
+
+@{
+    ViewData["Title"] = "Colores";
+}
+
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
+
+<div class="d-flex justify-content-between">
+    <h4>Colores</h4>
+    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#CrearColor">
+        <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; Nuevo Color
+    </button>
+</div>
+
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+
+
+<div class="modal fade" id="CrearColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar color</h5>
+                
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Agregar" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Color" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Color" class="form-control" />
+                                <span asp-validation-for="NuevoColor.Color" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditarColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button id="btn-close-editar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Editar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Idcolor" class="control-label">Codigo</label>
+                                <input asp-for="NuevoColor.Idcolor" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Idcolor" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Color" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Color" class="form-control" />
+                                <span asp-validation-for="NuevoColor.Color" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar Cambios" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EliminarColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Eliminar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Idcolor" class="control-label">Codigo</label>
+                                <input asp-for="NuevoColor.Idcolor" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Idcolor" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Color" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Color" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Color" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Estado" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Estado" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Eliminar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="RestaurarColor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button id="btn-close-restaurar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Restaurar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Idcolor" class="control-label">Codigo</label>
+                                <input asp-for="NuevoColor.Idcolor" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Idcolor" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Color" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Color" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Color" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="NuevoColor.Estado" class="control-label">Color</label>
+                                <input asp-for="NuevoColor.Estado" class="form-control" readonly />
+                                <span asp-validation-for="NuevoColor.Estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Restaurar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--filtro-->
+<div class="d-flex justify-content-between mb-4">
+    <input type="text" id="filtroColor" placeholder="Buscar por color..." class="form-control" style="width: calc(100% - 60px);">
+    <button class="btn bgRosa" id="toggleInactive"><i id="iconoMostrar" class="fa-solid fa-eye-slash fa-beat" style="color: #dfb9c6;"></i></button>
+</div>
+
+
+<table class="table" id="tablaColores">
+    <thead>
+        <tr>
+            <th>
+                Código
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Estado
+            </th>
+            <th class="text-center">
+                Editar
+            </th>
+            <th class="text-center">
+                Eliminar
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listaColores)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Idcolor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td class="text-center">
+                    @Html.ActionLink("", "Colores", new { id = item.Idcolor , accion = "Editar"}, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
+                </td>
+                <td class="text-center">
+                    @if (item.Estado == "Activo")
+                    {
+                        @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Eliminar" }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Restaurar" }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.abrirModal == "Editar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EditarColor').modal('show');
+            }, 500);
+            $('#btn-close-editar').on('click', function () {
+                window.location.href = '/Colores/Colores';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Eliminar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EliminarColor').modal('show');
+            }, 500);
+            $('#btn-close-eliminar').on('click', function () {
+                window.location.href = '/Colores/Colores';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Restaurar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#RestaurarColor').modal('show');
+            }, 500);
+            $('#btn-close-restaurar').on('click', function () {
+                window.location.href = '/Colores/Colores';
+            });
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        var filtroActual = '';
+
+        $('#filtroColor').on('input', function () {
+            filtroActual = $(this).val().toLowerCase();
+            filtrarFilas();
+        });
+
+        $('#toggleInactive').on('click', function () {
+            var iconoMostrar = $('#iconoMostrar');
+            var ocultarInactivos = !$(this).hasClass('activo');
+            $('#tablaColores tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(3)').text().trim();
+                if (estado === 'Inactivo') {
+                    $(this).toggle(ocultarInactivos);
+                }
+            });
+            if (ocultarInactivos) {
+                iconoMostrar.removeClass('fa-eye-slash').addClass('fa-eye'); 
+            } else {
+                iconoMostrar.removeClass('fa-eye').addClass('fa-eye-slash'); 
+            }
+            $(this).toggleClass('activo');
+            filtrarFilas();
+        });
+
+        function filtrarFilas() {
+            $('#tablaColores tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(3)').text().trim();
+                var cumpleFiltro = true;
+                if (filtroActual !== '') {
+                    cumpleFiltro = $(this).find('td:nth-child(2)').text().toLowerCase().indexOf(filtroActual) > -1;
+                }
+                var esInactivo = estado === 'Inactivo';
+                $(this).toggle(cumpleFiltro && (!esInactivo || $('#toggleInactive').hasClass('activo')));
+            });
+        }
+    });
+</script>
