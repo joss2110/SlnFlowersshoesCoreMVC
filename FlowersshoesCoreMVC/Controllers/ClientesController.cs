@@ -1,107 +1,274 @@
 ﻿using FlowersshoesCoreMVC.Models;
+using FlowersshoesCoreMVC.Models.Vistas;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Drawing;
 using System.Text;
 
 namespace FlowersshoesCoreMVC.Controllers
 {
     public class ClientesController : Controller
     {
-        List<TbCliente> listaclientes = new List<TbCliente>();
+        List<TbCliente> lista = new List<TbCliente>();
 
-        public async Task<List<TbCliente>> traerClientes()
+        public async Task<List<TbCliente>> GetClientes()
         {
-            // permite realizar una solicitud al servicio web api
+          
             using (var httpcliente = new HttpClient())
             {
-                // realizamos una solicitud Get
+               
                 var respuesta =
                     await httpcliente.GetAsync(
-                        "http://localhost:5050/api/Clientes/GetClientes");
-                // convertimos el contenido de la variable respuesta a una cadena
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                // para despues deserializarlo al formato Json de un List<Medicos>
+                        "http://localhost:5050/api/Clientes/GetClientes");             
+                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();              
                 return JsonConvert.DeserializeObject<List<TbCliente>>(respuestaAPI)!;
             }
         }
 
-        public async Task<ActionResult> ListarClientes()
-        {
-            listaclientes = await traerClientes();
-            //
-            return View(listaclientes);
-        }
+       
 
-        // GET: TbClientesController/Details/5
-        public async Task<ActionResult> DetailsMedico(int id)
-        {
-            if (listaclientes.Count == 0)
-                listaclientes = await traerClientes();
 
-            TbCliente buscado = listaclientes.Find(m => m.Idcli == id)!;
-
-            return View(buscado);
-        }
-
-        public async Task<string> enviarCliente(int opc, TbCliente obj)
+        public async Task<string> crearCliente( TbCliente obj)
         {
             string cadena = string.Empty;
 
-            //
-            // permite realizar una solicitud al servicio web api
+
             using (var httpcliente = new HttpClient())
             {
-                obj.Estado = "Activo";
+
                 StringContent contenido = new StringContent(
-                JsonConvert.SerializeObject(obj), Encoding.UTF8,
-                       "application/json");
+                   JsonConvert.SerializeObject(obj), Encoding.UTF8,
+                          "application/json");
 
                 HttpResponseMessage respuesta = new HttpResponseMessage();
-
-                if (opc == 1) // post = grabar
-                    respuesta =
+                respuesta =
                         await httpcliente.PostAsync("http://localhost:5050/api/Clientes/GrabarClientes", contenido);
-                else  // put = actualizar
-                    respuesta =
-                        await httpcliente.PutAsync("http://localhost:5050/api/Clientes/ActualizarClientes", contenido);
 
                 string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
                 cadena = respuestaAPI;
             }
             return cadena;
         }
-        // GET: TbClientesController/Create
-        public async Task<ActionResult> CrearCliente()
+
+        public async Task<string> EditarCliente(TbCliente obj)
         {
-            return View();
+            string cadena = string.Empty;
+
+
+            using (var httpcliente = new HttpClient())
+            {
+
+                StringContent contenido = new StringContent(
+                   JsonConvert.SerializeObject(obj), Encoding.UTF8,
+                          "application/json");
+
+                HttpResponseMessage respuesta = new HttpResponseMessage();
+                respuesta =
+                   await httpcliente.PutAsync("http://localhost:5050/api/Clientes/ActualizarClientes", contenido);
+
+                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
+                cadena = respuestaAPI;
+            }
+            return cadena;
         }
 
-        // POST: TbClientesController/Create
+
+
+        public async Task<string> EliminarRestaurarCliente(int id, int option)
+        {
+            string cadena = string.Empty;
+
+            using (var httpClient = new HttpClient())
+            {
+                if (option == 1)
+                {
+                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Clientes/EliminarCliente/{id}");
+                    cadena = await respuesta.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Clientes/RestaurarCliente/{id}");
+                    cadena = await respuesta.Content.ReadAsStringAsync();
+                }
+            }
+
+            return cadena;
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Clientes(int id, string accion)
+        {
+            lista = await GetClientes();
+            ClientesVista viewmodel;
+            ViewBag.abrirModal = "No";
+
+            if (id == 0)
+            {
+                viewmodel = new ClientesVista
+                {
+                   NuevoClientes = new TbCliente(),
+                    listaClientes = lista
+                };
+            }
+            else
+            {
+                viewmodel = new ClientesVista
+                {
+                    NuevoClientes = lista.Find(c => c.Idcli == id)!,
+                    listaClientes = lista
+                };
+                ViewBag.abrirModal = accion;
+            }
+
+
+
+            return View(viewmodel);
+        }
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CrearCliente(TbCliente obj)
+        public async Task<IActionResult> Agregar(ClientesVista model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                TempData["mensaje"] = await enviarCliente(1, obj);
-                return RedirectToAction("ListarClientes");
+                if (ModelState.IsValid == true)
+                {
+                    TbCliente nuevoCliente = model.NuevoClientes;
+
+                    TempData["mensaje"] = await crearCliente(nuevoCliente);
+
+                    return RedirectToAction(nameof(Clientes));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo Agregar un nuevo Registro, intentalo nuevamente";
+                }
             }
-            return View(obj);
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            lista = await GetClientes();
+
+            var viewmodel = new ClientesVista
+            {
+                NuevoClientes = new TbCliente(),
+                listaClientes = lista
+            };
+
+            return View("Clientes", viewmodel);
         }
 
-        public async Task<ActionResult> ActualizarCliente(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(ClientesVista model)
         {
-            if (listaclientes.Count == 0)
-                listaclientes = await traerClientes();
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    TbCliente nuevoCliente = model.NuevoClientes;
 
-            TbCliente buscado = listaclientes.Find(m => m.Idcli == id)!;
-          
-            return View(buscado);
+                    TempData["mensaje"] = await EditarCliente(nuevoCliente);
+
+                    return RedirectToAction(nameof(Clientes));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            lista = await GetClientes();
+
+            var viewmodel = new ClientesVista
+            {
+                NuevoClientes = new TbCliente(),
+                listaClientes = lista
+            };
+
+            return View("Clientes", viewmodel);
         }
-        public IActionResult Index()
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(ClientesVista model)
         {
-            return View();
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    TbCliente nuevoCliente = model.NuevoClientes;
+
+                    TempData["mensaje"] = await EliminarRestaurarCliente(model.NuevoClientes.Idcli,1);
+
+                    return RedirectToAction(nameof(Clientes));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            lista = await GetClientes();
+
+            var viewmodel = new ClientesVista
+            {
+                NuevoClientes = new TbCliente(),
+                listaClientes = lista
+            };
+
+            return View("Clientes", viewmodel);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restaurar(ClientesVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    TbCliente nuevoCliente = model.NuevoClientes;
+
+                    TempData["mensaje"] = await EliminarRestaurarCliente(model.NuevoClientes.Idcli, 2);
+
+                    return RedirectToAction(nameof(Clientes));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            lista = await GetClientes();
+
+            var viewmodel = new ClientesVista
+            {
+                NuevoClientes = new TbCliente(),
+                listaClientes = lista
+            };
+
+            return View("Clientes", viewmodel);
+        }
+
+
     }
 }
