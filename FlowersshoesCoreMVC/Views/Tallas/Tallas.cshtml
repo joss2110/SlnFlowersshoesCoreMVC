@@ -1,0 +1,51 @@
+﻿@model IEnumerable<FlowersshoesCoreMVC.Models.TbTalla>
+
+@{
+    ViewData["Title"] = "Tallas";
+}
+
+<div class="d-flex justify-content-between">
+    <h4>Tallas</h4>
+    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#CrearColor">
+        <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; 
+    </button>
+</div>
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Idtalla)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Talla)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idtalla)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Talla)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
