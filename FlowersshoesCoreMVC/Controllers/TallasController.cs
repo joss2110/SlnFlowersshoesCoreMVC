@@ -26,7 +26,7 @@ namespace FlowersshoesCoreMVC.Controllers
             lista = await GetTallas();
             
 
-
+//
 
             return View(lista);
         }
