@@ -1,0 +1,170 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.VentasVista
+
+@{
+    ViewData["Title"] = "Ventas";
+}
+
+<div class="modal fade" id="CrearCli" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Cliente</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Agregar" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Nomcli" class="control-label">Nombre</label>
+                                <input asp-for="nuevoCliente.Nomcli" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Nomcli" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Apellidos" class="control-label">Apellidos</label>
+                                <input asp-for="nuevoCliente.Apellidos" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Apellidos" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Tipodocumento" class="control-label">Tipo de Docuemnto</label>
+                                <input asp-for="nuevoCliente.Tipodocumento" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Tipodocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Nrodocumento" class="control-label">Nro de Documento</label>
+                                <input asp-for="nuevoCliente.Nrodocumento" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Nrodocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Telefono" class="control-label">Telefono</label>
+                                <input asp-for="nuevoCliente.Telefono" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Telefono" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Direccion" class="control-label">Direccion</label>
+                                <input asp-for="nuevoCliente.Direccion" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Direccion" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditarCli" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button id="btn-close-editar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Editar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Idcli" class="control-label">Codigo</label>
+                                <input asp-for="nuevoCliente.Idcli" class="form-control" readonly />
+                                <span asp-validation-for="nuevoCliente.Idcli" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Nomcli" class="control-label">Nombre</label>
+                                <input asp-for="nuevoCliente.Nomcli" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Nomcli" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Apellidos" class="control-label">Apellidos</label>
+                                <input asp-for="nuevoCliente.Apellidos" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Apellidos" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Tipodocumento" class="control-label">Tipo de Docuemnto</label>
+                                <input asp-for="nuevoCliente.Tipodocumento" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Tipodocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Nrodocumento" class="control-label">Nro de Documento</label>
+                                <input asp-for="nuevoCliente.Nrodocumento" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Nrodocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Telefono" class="control-label">Telefono</label>
+                                <input asp-for="nuevoCliente.Telefono" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Telefono" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="nuevoCliente.Direccion" class="control-label">Direccion</label>
+                                <input asp-for="nuevoCliente.Direccion" class="form-control" />
+                                <span asp-validation-for="nuevoCliente.Direccion" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar Cambios" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Nueva Venta</h3>
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+    @using(Html.BeginForm())
+    {
+       <div class="d-flex align-items-center">
+        @Html.TextBox("nrodoc", "", new { placeholder = "Ingresa nro de documento", @class = "form-control", style = "width: 300px;" })
+        <button class="btn bgRosa ms-2" ><i  class="fa-solid fa-magnifying-glass" style="color: #dfb9c6;"></i></button>
+        <button type="button" class="btn bgRosa ms-2" data-bs-toggle="modal" data-bs-target="#CrearCli"><i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i></button>
+        <label class="ms-3 " style=" font-size: 1.2rem;"><b>Cliente:</b></label>
+        <label class="ms-3 bgRosa px-3 py-2 rounded-pill" style=" font-size: 1.2rem;">@ViewBag.NombreCliente</label>
+        @if (ViewBag.IdCliente != null)
+        {
+            @Html.ActionLink("", "Index", new { id = @ViewBag.IdCliente, accion = "Editar" }, new { @class = "fa-regular fa-pen-to-square fa-beat ms-2", style = "color: #dfb9c6;" })
+        }
+        
+    </div>
+    }
+
+<h4 class="text-center mt-5 py-4 mb-4 border-top">Agregar Productos al Carrito</h4>
+
+@using(Html.BeginForm())
+    {
+        <div class="d-flex justify-content-between mb-4">
+            @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
+            <button class="btn bgRosa" ><i class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
+        </div>
+    }
+@if (ViewBag.abrirModal == "Editar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EditarCli').modal('show');
+            }, 500);
+            $('#btn-close-editar').on('click', function () {
+                window.location.href = '/Ventas/Index';
+            });
+        });
+    </script>
+}
+

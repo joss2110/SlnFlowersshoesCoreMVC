@@ -158,6 +158,109 @@ using System.Collections;
 		}
 
 		/// <summary>
+    /// Ejecuta un SqlCommand (que no devuelve un conjunto de resultados y no lleva parámetros) contra la base de datos especificada en 
+    /// la cadena de conexión. 
+    /// </summary>
+    /// <remarks>
+    /// Ejemplo:  
+    /// string resultado = ExecuteNonQuery(connString, CommandType.StoredProcedure, "PublicarPedidos");
+    /// </remarks>
+    /// <param name="connectionString">una cadena de conexión válida para un SqlConnection</param>
+    /// <param name="commandType">el CommandType (procedimiento almacenado, texto, etc.)</param>
+    /// <param name="commandText">el nombre del procedimiento almacenado o comando T-SQL</param>
+    /// <returns>una cadena que representa el número de filas afectadas por el comando</returns>
+
+    public static string ExecuteNonQuery2(string connectionString, string spName, List<KeyValuePair<string, object>> parametros)
+    {
+        string message = "";
+
+        try
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(spName, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    
+                    foreach (var parametro in parametros)
+                    {
+                        command.Parameters.AddWithValue(parametro.Key, parametro.Value);
+                    }
+
+                    SqlParameter messageParameter = new SqlParameter("@message", SqlDbType.VarChar, 100);
+                    messageParameter.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(messageParameter);
+
+                    command.ExecuteNonQuery();
+
+                    message = Convert.ToString(command.Parameters["@message"].Value)!;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+
+        return message;
+    }
+
+    /// <summary>
+    /// Ejecuta un SqlCommand (que devuelve un parámetro de salida) contra la base de datos especificada en 
+    /// la cadena de conexión. 
+    /// </summary>
+    /// <remarks>
+    /// Ejemplo:  
+    /// int res = ExecuteNonQuery3(connectionString, spName, new SqlParameter("@prodid", 24));
+    /// </remarks>
+    /// <param name="connectionString">una cadena de conexión válida para un SqlConnection</param>
+    /// <param name="spName">el nombre del procedimiento almacenado o comando T-SQL</param>
+    /// <param name="commandParameters">an array of SqlParamters used to execute the command</param>
+    /// <returns>un entero que representa el id como parámetro de salida</returns>
+
+    public static int ExecuteNonQuery3(string connectionString, string spName, List<KeyValuePair<string, object>> parametros)
+    {
+        int res = 0;
+
+        try
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(spName, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+
+                    foreach (var parametro in parametros)
+                    {
+                        command.Parameters.AddWithValue(parametro.Key, parametro.Value);
+                    }
+
+                    SqlParameter messageParameter = new SqlParameter("@id", SqlDbType.Int);
+                    messageParameter.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(messageParameter);
+
+                    command.ExecuteNonQuery();
+
+                    res = Convert.ToInt32(command.Parameters["@id"].Value)!;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            res = -1;
+        }
+
+        return res;
+    }
+
+
+    /// <summary>
 		/// Execute a SqlCommand (that returns no resultset) against the database specified in the connection string 
 		/// using the provided parameters.
 		/// </summary>
@@ -217,6 +320,8 @@ using System.Collections;
 				return ExecuteNonQuery(connectionString, CommandType.StoredProcedure, spName);
 			}
 		}
+
+		
 
 		/// <summary>
 		/// Execute a SqlCommand (that returns no resultset and takes no parameters) against the provided SqlConnection. 

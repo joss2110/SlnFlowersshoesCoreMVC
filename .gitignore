@@ -361,3 +361,33 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/FlowersshoesCoreMVC/Controllers/IngresosController.cs
+/FlowersshoesCoreMVC/Controllers/ProductosController.cs
+/FlowersshoesCoreMVC/Controllers/StocksController.cs
+/FlowersshoesCoreMVC/Controllers/TallasController.cs
+/FlowersshoesCoreMVC/Models/Vistas/ProductosVista.cs
+/FlowersshoesCoreMVC/Models/Vistas/StockVista.cs
+/FlowersshoesCoreMVC/Models/Vistas/TallasVista.cs
+/FlowersshoesCoreMVC/Models/PA_LISTAR_PRODUCTOS.cs
+/FlowersshoesCoreMVC/Models/PA_LISTAR_STOCKS.cs
+/FlowersshoesCoreMVC/Models/TbProducto.cs
+/FlowersshoesCoreMVC/Views/Productos/Productos.cshtml
+/FlowersshoesCoreMVC/Views/Stocks/Stocks.cshtml
+/FlowersshoesCoreMVC/Views/Tallas/Tallas.cshtml
+/FlowersshoesCoreMVC/Controllers/IngresosController.cs
+/FlowersshoesCoreMVC/Models/TbProducto.cs
+/FlowersshoesCoreMVC/Controllers/ClientesController.cs
+/FlowersshoesCoreMVC/Controllers/StocksController.cs
+/FlowersshoesCoreMVC/Controllers/TallasController.cs
+/FlowersshoesCoreMVC/Controllers/VentasController.cs
+/FlowersshoesCoreMVC/DAO/SQLHelper.cs
+/FlowersshoesCoreMVC/DAO/VentasDAO.cs
+/FlowersshoesCoreMVC/Models/Vistas/StockVista.cs
+/FlowersshoesCoreMVC/Models/Vistas/TallasVista.cs
+/FlowersshoesCoreMVC/Models/Vistas/VentasVista.cs
+/FlowersshoesCoreMVC/Models/PA_LISTAR_DETALLE_VENTAS.cs
+/FlowersshoesCoreMVC/Models/PA_LISTAR_PRODUCTOS.cs
+/FlowersshoesCoreMVC/Models/TbCliente.cs
+/FlowersshoesCoreMVC/Controllers/StocksController.cs
+/FlowersshoesCoreMVC/Controllers/StocksController.cs
+/FlowersshoesCoreMVC/Views/Tallas/Tallas.cshtml
