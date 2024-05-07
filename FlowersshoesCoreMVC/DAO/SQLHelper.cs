@@ -157,7 +157,7 @@ using System.Collections;
 			return ExecuteNonQuery(connectionString, commandType, commandText, (SqlParameter[])null);
 		}
 
-    /// <summary>
+		/// <summary>
     /// Ejecuta un SqlCommand (que no devuelve un conjunto de resultados y no lleva parámetros) contra la base de datos especificada en 
     /// la cadena de conexión. 
     /// </summary>
@@ -261,19 +261,19 @@ using System.Collections;
 
 
     /// <summary>
-    /// Execute a SqlCommand (that returns no resultset) against the database specified in the connection string 
-    /// using the provided parameters.
-    /// </summary>
-    /// <remarks>
-    /// e.g.:  
-    ///  int result = ExecuteNonQuery(connString, CommandType.StoredProcedure, "PublishOrders", new SqlParameter("@prodid", 24));
-    /// </remarks>
-    /// <param name="connectionString">a valid connection string for a SqlConnection</param>
-    /// <param name="commandType">the CommandType (stored procedure, text, etc.)</param>
-    /// <param name="commandText">the stored procedure name or T-SQL command</param>
-    /// <param name="commandParameters">an array of SqlParamters used to execute the command</param>
-    /// <returns>an int representing the number of rows affected by the command</returns>
-    public static int ExecuteNonQuery(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
+		/// Execute a SqlCommand (that returns no resultset) against the database specified in the connection string 
+		/// using the provided parameters.
+		/// </summary>
+		/// <remarks>
+		/// e.g.:  
+		///  int result = ExecuteNonQuery(connString, CommandType.StoredProcedure, "PublishOrders", new SqlParameter("@prodid", 24));
+		/// </remarks>
+		/// <param name="connectionString">a valid connection string for a SqlConnection</param>
+		/// <param name="commandType">the CommandType (stored procedure, text, etc.)</param>
+		/// <param name="commandText">the stored procedure name or T-SQL command</param>
+		/// <param name="commandParameters">an array of SqlParamters used to execute the command</param>
+		/// <returns>an int representing the number of rows affected by the command</returns>
+		public static int ExecuteNonQuery(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
 		{
 			//create & open a SqlConnection, and dispose of it after we are done.
 			using (SqlConnection cn = new SqlConnection(connectionString))
