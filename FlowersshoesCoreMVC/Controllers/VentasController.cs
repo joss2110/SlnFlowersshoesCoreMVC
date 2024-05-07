@@ -92,7 +92,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
         // GET: VentasController
-        public ActionResult Index(string nrodoc,string codbar, int id, string accion)
+        public ActionResult Index(string nrodoc, string codbar, int id, string accion)
         {
             VentasVista viewmodel;
             TbCliente cliente = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
@@ -100,7 +100,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             if (HttpContext.Session.GetString("detaVenta") == null)
             {
-               HttpContext.Session.SetString("detaVenta", JsonConvert.SerializeObject(listavd));
+                HttpContext.Session.SetString("detaVenta", JsonConvert.SerializeObject(listavd));
             }
 
             ViewBag.abrirModal = "No";
@@ -123,16 +123,16 @@ namespace FlowersshoesCoreMVC.Controllers
                 ViewBag.abrirModal = accion;
             }
 
-            if(nrodoc != null)
+            if (nrodoc != null)
             {
                 HttpContext.Session.SetString("cliente", JsonConvert.SerializeObject(cliente));
             }
-            
 
-            
+
+
 
             clienteActual = RecuperarCliente()!;
-            
+
 
             if (clienteActual != null)
             {

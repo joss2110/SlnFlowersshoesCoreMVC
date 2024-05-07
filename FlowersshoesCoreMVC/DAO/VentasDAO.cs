@@ -18,14 +18,14 @@ namespace FlowersshoesCoreMVC.DAO
             try
             {
                 int idventa = Convert.ToInt32(SqlHelper.ExecuteScalar(cad_cn, "PA_GRABAR_VENTA", idcli, idtra));
-                foreach(var item in detaVenta)
+                foreach (var item in detaVenta)
                 {
                     SqlHelper.ExecuteNonQuery(cad_cn, "PA_GRABAR_DETALLE_VENTA", idventa, item.Idpro, item.Cantidad, item.Preciouni, item.Subtotal);
                 }
                 resultado = "La venta se realzo con exito!";
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 resultado = ex.Message;
             }
