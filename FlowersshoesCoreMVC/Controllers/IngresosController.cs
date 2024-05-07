@@ -75,8 +75,8 @@ namespace FlowersshoesCoreMVC.Controllers
 
                 TbDetalleIngreso objD = new TbDetalleIngreso();
                 objD.Idingre = Convert.ToInt32(await respuesta.Content.ReadAsStringAsync());
-                objD.Idpro = obj.Idpro;
-                objD.Cantidad = obj.Cantidad;
+                //objD.Idpro = obj.Idpro;
+                //objD.Cantidad = obj.Cantidad;
 
                 StringContent contenidoDetalle = new StringContent(
                     JsonConvert.SerializeObject(objD), Encoding.UTF8,
@@ -144,8 +144,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 {
                     NuevoIngreso = new TbIngreso(),
                     listaIngresos = lista,
-                    listaTrabajadores = listaTrabajadores,
-                    listaProductos = listaProductos
+                   // listaTrabajadores = listaTrabajadores,
+                   // listaProductos = listaProductos
                 };
             }
             else
@@ -154,8 +154,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 {
                     NuevoIngreso = lista.Find(c => c.Idingre == id)!,
                     listaIngresos = lista,
-                    listaTrabajadores = listaTrabajadores,
-                    listaProductos = listaProductos
+                    //listaTrabajadores = listaTrabajadores,
+                   // listaProductos = listaProductos
                 };
                 ViewBag.abrirModal = accion;
             }
@@ -195,8 +195,8 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 NuevoIngreso = new TbIngreso(),
                 listaIngresos = lista,
-                listaTrabajadores = listaTrabajadores,
-                listaProductos = listaProductos
+                //listaTrabajadores = listaTrabajadores,
+                //listaProductos = listaProductos
             };
 
             return View("Ingresos", viewmodel);
@@ -234,8 +234,8 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 NuevoIngreso = new TbIngreso(),
                 listaIngresos = lista,
-                listaTrabajadores = listaTrabajadores,
-                listaProductos = listaProductos
+               // listaTrabajadores = listaTrabajadores,
+               // listaProductos = listaProductos
             };
 
             return View("Ingresos", viewmodel);
@@ -273,8 +273,8 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 NuevoIngreso = new TbIngreso(),
                 listaIngresos = lista,
-                listaTrabajadores = listaTrabajadores,
-                listaProductos = listaProductos
+               // listaTrabajadores = listaTrabajadores,
+                //listaProductos = listaProductos
             };
 
             return View("Ingresos", viewmodel);
