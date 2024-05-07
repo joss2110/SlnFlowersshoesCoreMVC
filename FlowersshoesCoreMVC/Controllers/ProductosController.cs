@@ -30,7 +30,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
 
-        public async Task<string> CrearProducto(PA_LISTAR_PRODUCTOS obj)
+        public async Task<string> CrearProducto(TbProducto obj)
         {
             string cadena = string.Empty;
 
@@ -52,7 +52,7 @@ namespace FlowersshoesCoreMVC.Controllers
             return cadena;
         }
 
-        public async Task<string> EditarProducto(PA_LISTAR_PRODUCTOS obj)
+        public async Task<string> EditarProducto(TbProducto obj)
         {
             string cadena = string.Empty;
 
@@ -161,16 +161,16 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
 
+        private readonly flowersshoesContext db;
 
 
 
 
 
-
-
-
-
-
+        public ProductosController(flowersshoesContext ctx)
+        {
+            db = ctx;
+        }
 
 
 
@@ -185,7 +185,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 viewmodel = new ProductosVista
                 {
-                    NuevoProductos = new PA_LISTAR_PRODUCTOS(),
+                    NuevoProductos = new TbProducto(),
                     listaProductos = lista
                 };
             }
@@ -193,7 +193,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 viewmodel = new ProductosVista
                 {
-                    NuevoProductos = lista.Find(c => c.idpro == id)!,
+                    NuevoProductos = db.TbProductos.Find(id)!,
                     listaProductos = lista
                 };
                 ViewBag.abrirModal = accion;
@@ -214,7 +214,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
+                    TbProducto nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await CrearProducto(nuevoProducto);
 
@@ -234,7 +234,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
+                NuevoProductos = new TbProducto(),
                 listaProductos = lista
             };
             ViewBag.tallas =
@@ -254,7 +254,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
+                    TbProducto nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await EditarProducto(nuevoProducto);
 
@@ -274,7 +274,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
+                NuevoProductos = new TbProducto(),
                 listaProductos = lista
             };
             ViewBag.tallas =
@@ -294,9 +294,9 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
+                    TbProducto nuevoProducto = model.NuevoProductos;
 
-                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.idpro, 1);
+                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.Idpro, 1);
 
                     return RedirectToAction(nameof(Productos));
                 }
@@ -314,7 +314,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
+                NuevoProductos = new TbProducto(),
                 listaProductos = lista
             };
 
@@ -328,9 +328,9 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
+                    TbProducto nuevoProducto = model.NuevoProductos;
 
-                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.idpro, 2);
+                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.Idpro, 2);
 
                     return RedirectToAction(nameof(Productos));
                 }
@@ -348,7 +348,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
+                NuevoProductos = new TbProducto(),
                 listaProductos = lista
             };
 
