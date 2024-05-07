@@ -1,14 +1,13 @@
-﻿@model IEnumerable<FlowersshoesCoreMVC.Models.TbTalla>
+﻿@model FlowersshoesCoreMVC.Models.Vistas.TallasVista
 
 @{
     ViewData["Title"] = "Tallas";
 }
 
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
+
 <div class="d-flex justify-content-between">
     <h4>Tallas</h4>
-    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#CrearColor">
-        <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; 
-    </button>
 </div>
 
 @if (TempData["mensaje"] != null)
@@ -21,23 +20,21 @@
 
 <hr />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+<table class="table" id="tablaTallas">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Idtalla)
+                Id Talla
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Talla)
+                Talla
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model.listaTallas)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Idtalla)
@@ -49,3 +46,43 @@
 }
     </tbody>
 </table>
+<script>
+    $(document).ready(function () {
+        var filtroActual = '';
+
+        $('#filtroColor').on('input', function () {
+            filtroActual = $(this).val().toLowerCase();
+            filtrarFilas();
+        });
+
+        $('#toggleInactive').on('click', function () {
+            var iconoMostrar = $('#iconoMostrar');
+            var ocultarInactivos = !$(this).hasClass('activo');
+            $('#tablaColores tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(3)').text().trim();
+                if (estado === 'Inactivo') {
+                    $(this).toggle(ocultarInactivos);
+                }
+            });
+            if (ocultarInactivos) {
+                iconoMostrar.removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                iconoMostrar.removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+            $(this).toggleClass('activo');
+            filtrarFilas();
+        });
+
+        function filtrarFilas() {
+            $('#tablaColores tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(3)').text().trim();
+                var cumpleFiltro = true;
+                if (filtroActual !== '') {
+                    cumpleFiltro = $(this).find('td:nth-child(2)').text().toLowerCase().indexOf(filtroActual) > -1;
+                }
+                var esInactivo = estado === 'Inactivo';
+                $(this).toggle(cumpleFiltro && (!esInactivo || $('#toggleInactive').hasClass('activo')));
+            });
+        }
+    });
+</script>
