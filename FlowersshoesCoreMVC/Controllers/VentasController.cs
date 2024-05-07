@@ -92,7 +92,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
         // GET: VentasController
-        public ActionResult Index(string nrodoc, int id, string accion)
+        public ActionResult Index(string nrodoc,string codbar, int id, string accion)
         {
             VentasVista viewmodel;
             TbCliente cliente = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
@@ -110,7 +110,7 @@ namespace FlowersshoesCoreMVC.Controllers
                 viewmodel = new VentasVista
                 {
                     nuevoCliente = new TbCliente(),
-                    listaDetaVenta = listavd
+                    //listaDetaVenta = listavd
                 };
             }
             else
@@ -118,7 +118,7 @@ namespace FlowersshoesCoreMVC.Controllers
                 viewmodel = new VentasVista
                 {
                     nuevoCliente = db.TbClientes.Find(id)!,
-                    listaDetaVenta = listavd
+                    //listaDetaVenta = listavd
                 };
                 ViewBag.abrirModal = accion;
             }
@@ -190,7 +190,7 @@ namespace FlowersshoesCoreMVC.Controllers
             var viewmodel = new VentasVista
             {
                 nuevoCliente = new TbCliente(),
-                listaDetaVenta = listavd
+                //listaDetaVenta = listavd
             };
 
             return View("Index", viewmodel);
@@ -239,7 +239,7 @@ namespace FlowersshoesCoreMVC.Controllers
             var viewmodel = new VentasVista
             {
                 nuevoCliente = new TbCliente(),
-                listaDetaVenta = listavd
+                //listaDetaVenta = listavd
             };
 
             return View("Index", viewmodel);

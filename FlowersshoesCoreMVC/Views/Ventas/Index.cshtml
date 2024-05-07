@@ -135,8 +135,8 @@
         @Html.TextBox("nrodoc", "", new { placeholder = "Ingresa nro de documento", @class = "form-control", style = "width: 300px;" })
         <button class="btn bgRosa ms-2" ><i  class="fa-solid fa-magnifying-glass" style="color: #dfb9c6;"></i></button>
         <button type="button" class="btn bgRosa ms-2" data-bs-toggle="modal" data-bs-target="#CrearCli"><i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i></button>
-        <label class="ms-3 " style=" font-size: 1.3rem;"><b>Cliente:</b></label>
-        <label class="ms-3 bgRosa px-3 py-2 rounded-pill" style=" font-size: 1.3rem;">@ViewBag.NombreCliente</label>
+        <label class="ms-3 " style=" font-size: 1.2rem;"><b>Cliente:</b></label>
+        <label class="ms-3 bgRosa px-3 py-2 rounded-pill" style=" font-size: 1.2rem;">@ViewBag.NombreCliente</label>
         @if (ViewBag.IdCliente != null)
         {
             @Html.ActionLink("", "Index", new { id = @ViewBag.IdCliente, accion = "Editar" }, new { @class = "fa-regular fa-pen-to-square fa-beat ms-2", style = "color: #dfb9c6;" })
@@ -147,11 +147,13 @@
 
 <h4 class="text-center mt-5 py-4 mb-4 border-top">Agregar Productos al Carrito</h4>
 
-<div class="d-flex justify-content-between mb-4">
-    <input type="text" id="filtroColor" placeholder="Ingresar codigo de barras" class="form-control" style="width: calc(100% - 60px);">
-    <button class="btn bgRosa" id="toggleInactive"><i id="iconoMostrar" class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
-</div>
-
+@using(Html.BeginForm())
+    {
+        <div class="d-flex justify-content-between mb-4">
+            @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
+            <button class="btn bgRosa" ><i class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
+        </div>
+    }
 @if (ViewBag.abrirModal == "Editar")
 {
     <script>
@@ -165,3 +167,4 @@
         });
     </script>
 }
+
