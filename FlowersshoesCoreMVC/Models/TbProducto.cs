@@ -20,7 +20,7 @@ namespace FlowersshoesCoreMVC.Models
         public string? Categoria { get; set; }
         public string? Temporada { get; set; }
         public string? Descripcion { get; set; }
-        public string Estado { get; set; } = null!;
+        public string Estado { get; set; } = string.Empty;
 
         public virtual TbColores IdcolorNavigation { get; set; } = null!;
         public virtual TbTalla IdtallaNavigation { get; set; } = null!;

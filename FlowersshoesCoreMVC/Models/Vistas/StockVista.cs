@@ -1,7 +1,9 @@
-﻿namespace FlowersshoesCoreMVC.Models.Vistas
+﻿using PrjFlowersshoesAPI.Models;
+
+namespace FlowersshoesCoreMVC.Models.Vistas
 {
     public class StockVista
     {
-        public IEnumerable<TbStock> listaStocks { get; set; } = Enumerable.Empty<TbStock>();
+        public IEnumerable<PA_LISTAR_STOCKS> listaStocks { get; set; } = Enumerable.Empty<PA_LISTAR_STOCKS>();
     }
 }

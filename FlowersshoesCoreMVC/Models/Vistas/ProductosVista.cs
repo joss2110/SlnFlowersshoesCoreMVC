@@ -1,8 +1,10 @@
-﻿namespace FlowersshoesCoreMVC.Models.Vistas
+﻿using PrjFlowersshoesAPI.Models;
+
+namespace FlowersshoesCoreMVC.Models.Vistas
 {
     public class ProductosVista
     {
-        public TbProducto NuevoProductos { get; set; } = new TbProducto();
-        public IEnumerable<TbProducto> listaProductos { get; set; } = Enumerable.Empty<TbProducto>();
+        public PA_LISTAR_PRODUCTOS NuevoProductos { get; set; } = new PA_LISTAR_PRODUCTOS();
+        public IEnumerable<PA_LISTAR_PRODUCTOS> listaProductos { get; set; } = Enumerable.Empty<PA_LISTAR_PRODUCTOS>();
     }
 }

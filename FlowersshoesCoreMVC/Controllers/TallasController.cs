@@ -38,12 +38,9 @@ namespace FlowersshoesCoreMVC.Controllers
             }
             else
             {
-                // Lógica para manejar el caso donde id no es igual a cero
-                // Por ejemplo, puedes definir un comportamiento predeterminado o lanzar una excepción
-                return NotFound(); // Retorna un resultado NotFound como ejemplo
-            }
 
-            // Si no se ha devuelto ningún valor hasta este punto, devolver el objeto viewmodel
+                return NotFound(); 
+            }
             return View(viewmodel);
 
         }

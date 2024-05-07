@@ -1,0 +1,311 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.IngresosVista
+
+@{
+    ViewData["Title"] = "Ingresos";
+}
+
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
+
+<div class="d-flex justify-content-between">
+    <h4>Ingresos</h4>
+    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#CrearIngreso">
+        <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; Nuevo Ingreso
+    </button>
+</div>
+
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+<div class="modal fade" id="CrearIngreso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar ingreso</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Agregar" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Descripcion" class="control-label">Descripción</label>
+                                <input asp-for="NuevoIngreso.Descripcion" class="form-control" />
+                                <span asp-validation-for="NuevoIngreso.Descripcion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Idtra" class="control-label">Trabajador</label>
+                                @Html.DropDownList("NuevoIngreso.Idtra", new SelectList(Model.listaTrabajadores, "Idtra", "Nombres"), "Seleccione", new { @class = "form-select" })
+                                <span asp-validation-for="NuevoIngreso.Idtra" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Idpro" class="control-label">Producto</label>
+                                @Html.DropDownList("NuevoIngreso.Idpro", new SelectList(Model.listaProductos, "Idpro", "Nompro"), "Seleccione", new { @class = "form-select" })
+                                <span asp-validation-for="NuevoIngreso.Idpro" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Cantidad" class="control-label">Cantidad</label>
+                                <input asp-for="NuevoIngreso.Cantidad" class="form-control" />
+                                <span asp-validation-for="NuevoIngreso.Cantidad" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EliminarIngreso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Ingreso</h5>
+                <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Eliminar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Idingre" class="control-label">Codigo</label>
+                                <input asp-for="NuevoIngreso.Idingre" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Idingre" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Descripcion" class="control-label">Descripción</label>
+                                <input asp-for="NuevoIngreso.Descripcion" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Descripcion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Nombres" class="control-label">Trabajador</label>
+                                <input asp-for="NuevoIngreso.Nombres" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Nompro" class="control-label">Producto</label>
+                                <input asp-for="NuevoIngreso.Nompro" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Nompro" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Cantidad" class="control-label">Cantidad</label>
+                                <input asp-for="NuevoIngreso.Cantidad" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Cantidad" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Estado" class="control-label">Estado</label>
+                                <input asp-for="NuevoIngreso.Estado" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Eliminar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="RestaurarIngreso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Ingreso</h5>
+                <button id="btn-close-restaurar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Restaurar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Idingre" class="control-label">Codigo</label>
+                                <input asp-for="NuevoIngreso.Idingre" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Idingre" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Descripcion" class="control-label">Descripción</label>
+                                <input asp-for="NuevoIngreso.Descripcion" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Descripcion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Nombres" class="control-label">Trabajador</label>
+                                <input asp-for="NuevoIngreso.Nombres" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Nompro" class="control-label">Producto</label>
+                                <input asp-for="NuevoIngreso.Nompro" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Nompro" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Cantidad" class="control-label">Cantidad</label>
+                                <input asp-for="NuevoIngreso.Cantidad" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Cantidad" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoIngreso.Estado" class="control-label">Estado</label>
+                                <input asp-for="NuevoIngreso.Estado" class="form-control" readonly />
+                                <span asp-validation-for="NuevoIngreso.Estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Restaurar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--filtro-->
+<div class="d-flex justify-content-between mb-4">
+    <input type="text" id="filtroIngreso" placeholder="Buscar por descripción..." class="form-control" style="width: calc(100% - 60px);">
+    <button class="btn bgRosa" id="toggleInactive"><i id="iconoMostrar" class="fa-solid fa-eye-slash fa-beat" style="color: #dfb9c6;"></i></button>
+</div>
+
+<table class="table" id="tablaIngresos">
+    <thead>
+        <tr>
+            <th>
+                Código
+            </th>
+            <th>
+                Fecha
+            </th>
+            <th>
+                Descripción
+            </th>
+            <th>
+                Trabajador
+            </th>
+            <th>
+                Estado
+            </th>
+            <th class="text-center">
+                Eliminar
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listaIngresos)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Idingre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td class="text-center">
+                    @if (item.Estado == "Activo")
+                    {
+                        @Html.ActionLink("", "Ingresos", new { id = item.Idingre, accion = "Eliminar" }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("", "Ingresos", new { id = item.Idingre, accion = "Restaurar" }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.abrirModal == "Eliminar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EliminarIngreso').modal('show');
+            }, 500);
+            $('#btn-close-eliminar').on('click', function () {
+                window.location.href = '/Ingresos/Ingresos';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Restaurar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#RestaurarIngreso').modal('show');
+            }, 500);
+            $('#btn-close-restaurar').on('click', function () {
+                window.location.href = '/Ingresos/Ingresos';
+            });
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        var filtroActual = '';
+
+        $('#filtroIngreso').on('input', function () {
+            filtroActual = $(this).val().toLowerCase();
+            filtrarFilas();
+        });
+
+        $('#toggleInactive').on('click', function () {
+            var iconoMostrar = $('#iconoMostrar');
+            var ocultarInactivos = !$(this).hasClass('activo');
+            $('#tablaIngresos tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(5)').text().trim();
+                if (estado === 'Inactivo') {
+                    $(this).toggle(ocultarInactivos);
+                }
+            });
+            if (ocultarInactivos) {
+                iconoMostrar.removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                iconoMostrar.removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+            $(this).toggleClass('activo');
+            filtrarFilas();
+        });
+
+        function filtrarFilas() {
+            $('#tablaIngresos tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(5)').text().trim();
+                var cumpleFiltro = true;
+                if (filtroActual !== '') {
+                    cumpleFiltro = $(this).find('td:nth-child(3)').text().toLowerCase().indexOf(filtroActual) > -1;
+                }
+                var esInactivo = estado === 'Inactivo';
+                $(this).toggle(cumpleFiltro && (!esInactivo || $('#toggleInactive').hasClass('activo')));
+            });
+        }
+    });
+</script>

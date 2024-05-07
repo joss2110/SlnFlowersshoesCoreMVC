@@ -2,16 +2,18 @@
 using FlowersshoesCoreMVC.Models.Vistas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using PrjFlowersshoesAPI.Models;
 using System.Text;
 
 namespace FlowersshoesCoreMVC.Controllers
 {
     public class ProductosController : Controller
     {
-        List<TbProducto> lista = new List<TbProducto>();
+        List<PA_LISTAR_PRODUCTOS> lista = new List<PA_LISTAR_PRODUCTOS>();
 
-        public async Task<List<TbProducto>> GetProductos()
+        public async Task<List<PA_LISTAR_PRODUCTOS>> GetProductos()
         {
 
             using (var httpcliente = new HttpClient())
@@ -21,14 +23,14 @@ namespace FlowersshoesCoreMVC.Controllers
                     await httpcliente.GetAsync(
                         "http://localhost:5050/api/Productos/GetProductos");
                 string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<TbProducto>>(respuestaAPI)!;
+                return JsonConvert.DeserializeObject<List<PA_LISTAR_PRODUCTOS>>(respuestaAPI)!;
             }
         }
 
 
 
 
-        public async Task<string> CrearProducto(TbProducto obj)
+        public async Task<string> CrearProducto(PA_LISTAR_PRODUCTOS obj)
         {
             string cadena = string.Empty;
 
@@ -50,7 +52,7 @@ namespace FlowersshoesCoreMVC.Controllers
             return cadena;
         }
 
-        public async Task<string> EditarProducto(TbProducto obj)
+        public async Task<string> EditarProducto(PA_LISTAR_PRODUCTOS obj)
         {
             string cadena = string.Empty;
 
@@ -95,6 +97,83 @@ namespace FlowersshoesCoreMVC.Controllers
             return cadena;
         }
 
+
+
+
+
+
+
+
+
+
+
+
+        // Distritos
+        //List<Distritos> listadistritos = new List<Distritos>();
+        public async Task<List<TbTalla>> traerTallas()
+        {
+            // permite realizar una solicitud al servicio web api
+            using (var httpcliente = new HttpClient())
+            {
+                // realizamos una solicitud Get
+                var respuesta =
+                    await httpcliente.GetAsync(
+                        "http://localhost:5050/api/Tallas/GetTallas");
+                // convertimos el contenido de la variable respuesta a una cadena
+                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
+                // para despues deserializarlo al formato Json de un List<Distritos>
+                return JsonConvert.DeserializeObject<List<TbTalla>>(respuestaAPI)!;
+            }
+        }
+
+        // Especialidad
+        //List<Especialidad> listaespecialidad = new List<Especialidad>();
+        public async Task<List<TbColores>> traerColores()
+        {
+            // permite realizar una solicitud al servicio web api
+            using (var httpcliente = new HttpClient())
+            {
+                // realizamos una solicitud Get
+                var respuesta =
+                    await httpcliente.GetAsync(
+                        "http://localhost:5050/api/Colores/GetColores");
+                // convertimos el contenido de la variable respuesta a una cadena
+                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
+                // para despues deserializarlo al formato Json de un List<Distritos>
+                return JsonConvert.DeserializeObject<List<TbColores>>(respuestaAPI)!;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> Productos(int id, string accion)
         {
@@ -106,7 +185,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 viewmodel = new ProductosVista
                 {
-                    NuevoProductos = new TbProducto(),
+                    NuevoProductos = new PA_LISTAR_PRODUCTOS(),
                     listaProductos = lista
                 };
             }
@@ -114,7 +193,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 viewmodel = new ProductosVista
                 {
-                    NuevoProductos = lista.Find(c => c.Idpro == id)!,
+                    NuevoProductos = lista.Find(c => c.idpro == id)!,
                     listaProductos = lista
                 };
                 ViewBag.abrirModal = accion;
@@ -135,7 +214,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    TbProducto nuevoProducto = model.NuevoProductos;
+                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await CrearProducto(nuevoProducto);
 
@@ -155,9 +234,14 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new TbProducto(),
+                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
                 listaProductos = lista
             };
+            ViewBag.tallas =
+               new SelectList(await traerTallas(), "Idtalla", "Talla");
+            //
+            ViewBag.color =
+                new SelectList(await traerColores(), "Idcolor", "Color");
 
             return View("Productos", viewmodel);
         }
@@ -170,7 +254,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    TbProducto nuevoProducto = model.NuevoProductos;
+                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await EditarProducto(nuevoProducto);
 
@@ -190,9 +274,14 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new TbProducto(),
+                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
                 listaProductos = lista
             };
+            ViewBag.tallas =
+              new SelectList(await traerTallas(), "Idtalla", "Talla");
+            //
+            ViewBag.color =
+                new SelectList(await traerColores(), "Idcolor", "Color");
 
             return View("Productos", viewmodel);
         }
@@ -205,9 +294,9 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    TbProducto nuevoProducto = model.NuevoProductos;
+                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
 
-                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.Idpro, 1);
+                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.idpro, 1);
 
                     return RedirectToAction(nameof(Productos));
                 }
@@ -225,7 +314,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new TbProducto(),
+                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
                 listaProductos = lista
             };
 
@@ -239,9 +328,9 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (ModelState.IsValid == true)
                 {
-                    TbProducto nuevoProducto = model.NuevoProductos;
+                    PA_LISTAR_PRODUCTOS nuevoProducto = model.NuevoProductos;
 
-                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.Idpro, 2);
+                    TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.idpro, 2);
 
                     return RedirectToAction(nameof(Productos));
                 }
@@ -259,7 +348,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ProductosVista
             {
-                NuevoProductos = new TbProducto(),
+                NuevoProductos = new PA_LISTAR_PRODUCTOS(),
                 listaProductos = lista
             };
 
