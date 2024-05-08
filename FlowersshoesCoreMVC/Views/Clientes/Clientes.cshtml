@@ -6,9 +6,10 @@
 
 <h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
 
+
 <div class="d-flex justify-content-between">
     <h4>Clientes</h4>
-    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#CrearCliente">
+    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#crearCliente">
         <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; Nuevo Cliente
     </button>
 </div>
@@ -21,8 +22,10 @@
 }
 
 <hr />
-
-<div class="modal fade" id="CrearCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@{
+    var datos = ViewBag.Datos as List<SelectListItem>;
+}
+<div class="modal fade" id="crearCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -46,8 +49,13 @@
                                 <span asp-validation-for="NuevoClientes.Apellidos" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="NuevoClientes.Tipodocumento" class="control-label">Tipo de Docuemnto</label>
-                                <input asp-for="NuevoClientes.Tipodocumento" class="form-control" />
+                                <label asp-for="NuevoClientes.Tipodocumento" class="control-label">Tipo de Docuemnto</label>                               
+                                <select asp-for="NuevoClientes.Tipodocumento" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="Pasaporter">Pasaporter</option>
+                                    <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
+                                </select>
                                 <span asp-validation-for="NuevoClientes.Tipodocumento" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -68,6 +76,7 @@
 
                             <div class="form-group pt-3">
                                 <input type="submit" value="Guardar" class="btn bgRosa w-100" />
+
                             </div>
                         </form>
                     </div>
@@ -76,6 +85,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="EditarCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
@@ -107,7 +117,12 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoClientes.Tipodocumento" class="control-label">Tipo de Docuemnto</label>
-                                <input asp-for="NuevoClientes.Tipodocumento" class="form-control" />
+                                <select asp-for="NuevoClientes.Tipodocumento" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="Pasaporter">Pasaporter</option>
+                                    <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
+                                </select>
                                 <span asp-validation-for="NuevoClientes.Tipodocumento" class="text-danger"></span>
                             </div>
                             <div class="form-group">
