@@ -2,6 +2,7 @@
 {
     public class PA_LISTAR_DETALLE_VENTAS
     {
+        public int idventa { get; set; }
         public string imagen { get; set; } = string.Empty;
         public int idpro { get; set; }
         public string nompro { get; set; } = string.Empty;
