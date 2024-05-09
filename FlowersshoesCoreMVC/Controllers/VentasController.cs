@@ -542,7 +542,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             var viewmodel = new ReporteVentasVista
             {
-                editventa = new TbVenta(),
+                editventa = new PA_LISTAR_VENTAS(),
                 listaVenta = listav,
                 listaDetaVenta = listavd
 
