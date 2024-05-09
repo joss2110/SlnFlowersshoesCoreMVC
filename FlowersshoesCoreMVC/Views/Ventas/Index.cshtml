@@ -147,13 +147,83 @@
 
 <h4 class="text-center mt-5 py-4 mb-4 border-top">Agregar Productos al Carrito</h4>
 
-@using (Html.BeginForm())
-{
-    <div class="d-flex justify-content-between mb-4">
-        @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
-        <button class="btn bgRosa"><i class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
-    </div>
-}
+
+    <form asp-action="AgregarCarrito" method="post">
+        <div class="d-flex justify-content-between mb-4">
+            @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
+            <button class="btn bgRosa"><i class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
+        </div>
+    </form>
+
+<table class="table" id="tablaProductos">
+<thead>
+    <tr>
+        <th>
+            Imagen
+        </th>
+        <th>
+            Modelo
+        </th>
+        <th>
+            Color
+        </th>
+        <th>
+            Talla
+        </th>
+        <th>
+            Cantidad
+        </th>
+        <th>
+            Precio Unitario
+        </th>
+        <th>
+            Subtotal
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model.listaDetaVenta)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.imagen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nompro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.talla)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Preciouni)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subtotal)
+            </td>
+        </tr>
+    }
+</tbody>
+</table>
+
+<div class="d-flex align-items-center justify-content-end mt-5">
+    <label class="ms-3 " style=" font-size: 1.2rem;"><b>Total:</b></label>
+    <label class="ms-3 bgRosa px-3 py-2 rounded-pill" style=" font-size: 1.2rem;">@ViewBag.Total</label>
+</div>
+
+
+<form asp-action="GenerarVenta" method="post">
+    <button class="btn bgRosa mt-5" style="width: 100%;">GENERAR VENTA</button>
+</form>
+
+
+
+
 @if (ViewBag.abrirModal == "Editar")
 {
     <script>
