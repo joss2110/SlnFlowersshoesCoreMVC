@@ -1,0 +1,469 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.TrabajadoresVista
+
+@{
+    ViewData["Title"] = "Trabajadores";
+}
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
+
+
+<div class="d-flex justify-content-between">
+    <h4>Trabajadores</h4>
+    <button type="button" class="btn btn-light bgRosa" data-bs-toggle="modal" data-bs-target="#crearTrabajador">
+        <i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i> &nbsp; Nuevo Trabajador
+    </button>
+</div>
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+<div class="modal fade" id="crearTrabajador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Trabajador</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Agregar" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Nombres" class="control-label">Nombres</label>
+                                <input asp-for="NuevoTrabajador.Nombres" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.TipoDocumento" class="control-label">Tipo de Docuemnto</label>
+                                <select asp-for="NuevoTrabajador.TipoDocumento" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="Pasaporter">Pasaporter</option>
+                                    <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
+                                </select>
+                                <span asp-validation-for="NuevoTrabajador.TipoDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.NroDocumento" class="control-label">Nro de Documento</label>
+                                <input asp-for="NuevoTrabajador.NroDocumento" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.NroDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Direccion" class="control-label">Direccion</label>
+                                <input asp-for="NuevoTrabajador.Direccion" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Direccion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Email" class="control-label">Email</label>
+                                <input asp-for="NuevoTrabajador.Email" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Pass" class="control-label">Password</label>
+                                <input asp-for="NuevoTrabajador.Pass" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Pass" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idrol" class="control-label">IdRol</label>
+                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
+                            </div>
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar" class="btn bgRosa w-100" />
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="EditarTrabajador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Trabajador</h5>
+                <button id="btn-close-editar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Editar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idtra" class="control-label">Codigo</label>
+                                <input asp-for="NuevoTrabajador.Idtra" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Idtra" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Nombres" class="control-label">Nombres</label>
+                                <input asp-for="NuevoTrabajador.Nombres" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.TipoDocumento" class="control-label">Tipo de Docuemnto</label>
+                                <select asp-for="NuevoTrabajador.TipoDocumento" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="Pasaporter">Pasaporter</option>
+                                    <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
+                                </select>
+                                <span asp-validation-for="NuevoTrabajador.TipoDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.NroDocumento" class="control-label">Nro de Documento</label>
+                                <input asp-for="NuevoTrabajador.NroDocumento" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.NroDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Direccion" class="control-label">Direccion</label>
+                                <input asp-for="NuevoTrabajador.Direccion" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Direccion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Email" class="control-label">Email</label>
+                                <input asp-for="NuevoTrabajador.Email" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Pass" class="control-label">Password</label>
+                                <input asp-for="NuevoTrabajador.Pass" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Pass" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idrol" class="control-label">IdRol</label>
+                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" />
+                                <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
+                            </div>
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Guardar Cambios" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EliminarTrabajador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar Trabajador</h5>
+                <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Eliminar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idtra" class="control-label">Codigo</label>
+                                <input asp-for="NuevoTrabajador.Idtra" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Idtra" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Nombres" class="control-label">Nombres</label>
+                                <input asp-for="NuevoTrabajador.Nombres" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.TipoDocumento" class="control-label">Tipo de Docuemnto</label>
+                                <input asp-for="NuevoTrabajador.TipoDocumento" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.TipoDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.NroDocumento" class="control-label">Nro de Documento</label>
+                                <input asp-for="NuevoTrabajador.NroDocumento" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.NroDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Direccion" class="control-label">Direccion</label>
+                                <input asp-for="NuevoTrabajador.Direccion" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Direccion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Email" class="control-label">Email</label>
+                                <input asp-for="NuevoTrabajador.Email" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Pass" class="control-label">Password</label>
+                                <input asp-for="NuevoTrabajador.Pass" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Pass" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idrol" class="control-label">Rol</label>
+                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Estado" class="control-label">Estado</label>
+                                <input asp-for="NuevoTrabajador.Estado" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Eliminar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="RestaurarTrabajador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Restaurar Trabajador</h5>
+                <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Restaurar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idtra" class="control-label">Codigo</label>
+                                <input asp-for="NuevoTrabajador.Idtra" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Idtra" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Nombres" class="control-label">Nombres</label>
+                                <input asp-for="NuevoTrabajador.Nombres" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Nombres" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.TipoDocumento" class="control-label">Tipo de Docuemnto</label>
+                                <input asp-for="NuevoTrabajador.TipoDocumento" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.TipoDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.NroDocumento" class="control-label">Nro de Documento</label>
+                                <input asp-for="NuevoTrabajador.NroDocumento" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.NroDocumento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Direccion" class="control-label">Direccion</label>
+                                <input asp-for="NuevoTrabajador.Direccion" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Direccion" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Email" class="control-label">Email</label>
+                                <input asp-for="NuevoTrabajador.Email" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Pass" class="control-label">Password</label>
+                                <input asp-for="NuevoTrabajador.Pass" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Pass" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Idrol" class="control-label">Rol</label>
+                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NuevoTrabajador.Estado" class="control-label">Estado</label>
+                                <input asp-for="NuevoTrabajador.Estado" class="form-control" readonly />
+                                <span asp-validation-for="NuevoTrabajador.Estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Restaurar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--filtro-->
+<div class="d-flex justify-content-between mb-4">
+    <input type="text" id="filtroTrabajador" placeholder="Buscar por trabajador..." class="form-control" style="width: calc(100% - 60px);">
+    <button class="btn bgRosa" id="toggleInactive"><i id="iconoMostrar" class="fa-solid fa-eye-slash fa-beat" style="color: #dfb9c6;"></i></button>
+</div>
+
+<table class="table" id="tablaTrabajadores">
+    <thead>
+        <tr>
+            <th>
+                Codigo
+            </th>
+            <th>
+                Nombres
+            </th>
+            <th>
+                Tipo Documento
+            </th>
+            <th>
+                Nro. Documento
+            </th>
+            <th>
+                Direccion
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Password
+            </th>
+            <th>
+                Rol
+            </th>
+            <th>
+                Estado
+            </th>
+            <th class="text-center">
+                Editar
+            </th>
+            <th class="text-center">
+                Eliminar
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listaTrabajadores)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.idtra)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tipoDocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nroDocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.direccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pass)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nomRol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.estado)
+                </td>
+                <td class="text-center">
+                    @Html.ActionLink("", "Trabajadores", new { id = item.idtra, accion = "Editar" }, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
+                </td>
+                <td class="text-center">
+                    @if (item.estado == "Activo")
+                    {
+                        @Html.ActionLink("", "Trabajadores", new { id = item.idtra, accion = "Eliminar" }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("", "Trabajadores", new { id = item.idtra, accion = "Restaurar" }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (ViewBag.abrirModal == "Editar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EditarTrabajador').modal('show');
+            }, 500);
+            $('#btn-close-editar').on('click', function () {
+                window.location.href = '/Trabajadores/Trabajadores';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Eliminar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EliminarTrabajador').modal('show');
+            }, 500);
+            $('#btn-close-eliminar').on('click', function () {
+                window.location.href = '/Trabajadores/Trabajadores';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Restaurar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#RestaurarTrabajador').modal('show');
+            }, 500);
+            $('#btn-close-restaurar').on('click', function () {
+                window.location.href = '/Trabajadores/Trabajadores';
+            });
+        });
+    </script>
+}
+<script>
+    $(document).ready(function () {
+        var filtroActual = '';
+
+        $('#filtroTrabajador').on('input', function () {
+            filtroActual = $(this).val().toLowerCase();
+            filtrarFilas();
+        });
+
+        $('#toggleInactive').on('click', function () {
+            var iconoMostrar = $('#iconoMostrar');
+            var ocultarInactivos = !$(this).hasClass('activo');
+            $('#tablaTrabajadores tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(9)').text().trim();
+                if (estado === 'Inactivo') {
+                    $(this).toggle(ocultarInactivos);
+                }
+            });
+            if (ocultarInactivos) {
+                iconoMostrar.removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                iconoMostrar.removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+            $(this).toggleClass('activo');
+            filtrarFilas();
+        });
+
+        function filtrarFilas() {
+            $('#tablaTrabajadores tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(9)').text().trim();
+                var cumpleFiltro = true;
+                if (filtroActual !== '') {
+                    cumpleFiltro = $(this).find('td:nth-child(2)').text().toLowerCase().indexOf(filtroActual) > -1;
+                }
+                var esInactivo = estado === 'Inactivo';
+                $(this).toggle(cumpleFiltro && (!esInactivo || $('#toggleInactive').hasClass('activo')));
+            });
+        }
+    });
+</script>
