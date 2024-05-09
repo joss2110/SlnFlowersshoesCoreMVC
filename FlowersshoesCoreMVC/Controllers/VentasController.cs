@@ -65,7 +65,7 @@ namespace FlowersshoesCoreMVC.Controllers
         }
 
 
-        List<TbDetalleVenta> listavd = new List<TbDetalleVenta>();
+        List<PA_LISTAR_DETALLE_VENTAS> listacarrito = new List<PA_LISTAR_DETALLE_VENTAS>();
         TbCliente clienteActual = new TbCliente();
 
         TbCliente? RecuperarCliente()
@@ -90,27 +90,65 @@ namespace FlowersshoesCoreMVC.Controllers
             }
         }
 
+        void GrabarCliente()
+        {
+            HttpContext.Session.SetString("cliente",
+                    JsonConvert.SerializeObject(clienteActual));
+        }
+
+
+        List<PA_LISTAR_DETALLE_VENTAS> RecuperarCarrito()
+        {
+            var carritoJson = HttpContext.Session.GetString("Carrito");
+
+            if (carritoJson != null)
+            {
+                return JsonConvert.DeserializeObject<List<PA_LISTAR_DETALLE_VENTAS>>(carritoJson)!;
+            }
+            else
+            {
+                // Si la cadena JSON es nula, devolver una lista vacía
+                return new List<PA_LISTAR_DETALLE_VENTAS>();
+            }
+        }
+
+        void GrabarCarrito()
+        {
+            HttpContext.Session.SetString("Carrito",
+                    JsonConvert.SerializeObject(listacarrito));
+        }
+
+
+
+
 
         // GET: VentasController
-        public ActionResult Index(string nrodoc, string codbar, int id, string accion)
+        public ActionResult Index(string nrodoc, int id, string accion)
         {
             VentasVista viewmodel;
-            TbCliente cliente = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
+           
+            
+            ViewBag.abrirModal = "No";
+
+            listacarrito = RecuperarCarrito();
+
+            decimal sumaSubtotales = 0;
 
 
-            if (HttpContext.Session.GetString("detaVenta") == null)
+            foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
             {
-                HttpContext.Session.SetString("detaVenta", JsonConvert.SerializeObject(listavd));
+                sumaSubtotales += item.Subtotal;
             }
 
-            ViewBag.abrirModal = "No";
+            ViewBag.Total = sumaSubtotales;
 
             if (id == 0)
             {
+                
                 viewmodel = new VentasVista
                 {
                     nuevoCliente = new TbCliente(),
-                    //listaDetaVenta = listavd
+                    listaDetaVenta = listacarrito
                 };
             }
             else
@@ -118,21 +156,19 @@ namespace FlowersshoesCoreMVC.Controllers
                 viewmodel = new VentasVista
                 {
                     nuevoCliente = db.TbClientes.Find(id)!,
-                    //listaDetaVenta = listavd
+                    listaDetaVenta = listacarrito
                 };
                 ViewBag.abrirModal = accion;
             }
 
             if (nrodoc != null)
             {
-                HttpContext.Session.SetString("cliente", JsonConvert.SerializeObject(cliente));
+                clienteActual = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
+                GrabarCliente();
             }
-
-
-
+            
 
             clienteActual = RecuperarCliente()!;
-
 
             if (clienteActual != null)
             {
@@ -145,6 +181,169 @@ namespace FlowersshoesCoreMVC.Controllers
             }
 
             return View(viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GenerarVenta(string codbar)
+        {
+
+            clienteActual = RecuperarCliente()!;
+            listacarrito = RecuperarCarrito();
+            if (clienteActual != null && listacarrito !=null)
+            {
+                List<TbDetalleVenta> lista = new List<TbDetalleVenta>();
+                
+
+                foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
+                {
+
+                    TbDetalleVenta dv = new TbDetalleVenta()
+                    {
+                        Idpro = item.idpro,
+                        Cantidad = item.cantidad,
+                        Preciouni = item.Preciouni,
+                        Subtotal = item.Subtotal
+                    };
+                    lista.Add(dv);
+                }
+
+            }
+
+            TbProducto producto = db.TbProductos.FirstOrDefault(p => p.Codbar == codbar)!;
+
+            if (codbar != null)
+            {
+                listacarrito = RecuperarCarrito(); 
+                var encontrado = listacarrito.Find(c => c.idpro == producto.Idpro);
+                if (encontrado == null)
+                {
+                    PA_LISTAR_DETALLE_VENTAS ldv = new PA_LISTAR_DETALLE_VENTAS()
+                    {
+                        imagen = producto.Imagen!,
+                        idpro = producto.Idpro,
+                        nompro = producto.Nompro,
+                        color = db.TbColores.Find(producto.Idcolor)!.Color,
+                        talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
+                        cantidad = 1,
+                        Preciouni = producto.Precio,
+                        Subtotal = producto.Precio
+                    };
+                    listacarrito.Add(ldv);
+                }
+                else
+                {
+                    encontrado.cantidad += 1;
+                    encontrado.Subtotal = encontrado.Preciouni * encontrado.cantidad;
+                }
+                GrabarCarrito();
+
+            }
+
+
+
+
+            listacarrito = RecuperarCarrito();
+
+            decimal sumaSubtotales = 0;
+
+
+            foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
+            {
+                sumaSubtotales += item.Subtotal;
+            }
+
+            ViewBag.Total = sumaSubtotales;
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
+            var viewmodel = new VentasVista
+            {
+                nuevoCliente = new TbCliente(),
+                listaDetaVenta = listacarrito
+            };
+
+            return View("Index", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AgregarCarrito(string codbar)
+        {
+            TbProducto producto = db.TbProductos.FirstOrDefault(p => p.Codbar == codbar)!;
+
+            if (codbar != null)
+            {
+                listacarrito = RecuperarCarrito();
+                var encontrado = listacarrito.Find(c => c.idpro == producto.Idpro);
+                if (encontrado == null)
+                {
+                    PA_LISTAR_DETALLE_VENTAS ldv = new PA_LISTAR_DETALLE_VENTAS()
+                    {
+                        imagen = producto.Imagen!,
+                        idpro = producto.Idpro,
+                        nompro = producto.Nompro,
+                        color = db.TbColores.Find(producto.Idcolor)!.Color,
+                        talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
+                        cantidad = 1,
+                        Preciouni = producto.Precio,
+                        Subtotal = producto.Precio
+                    };
+                    listacarrito.Add(ldv);
+                }
+                else
+                {
+                    encontrado.cantidad += 1;
+                    encontrado.Subtotal = encontrado.Preciouni * encontrado.cantidad;
+                }
+                GrabarCarrito();
+
+            }
+           
+
+           
+
+            listacarrito = RecuperarCarrito();
+
+            decimal sumaSubtotales = 0;
+
+
+            foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
+            {
+                sumaSubtotales += item.Subtotal;
+            }
+
+            ViewBag.Total = sumaSubtotales;
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
+            var viewmodel = new VentasVista
+            {
+                nuevoCliente = new TbCliente(),
+                listaDetaVenta = listacarrito
+            };
+
+            return View("Index", viewmodel);
         }
 
         [HttpPost]
@@ -187,10 +386,35 @@ namespace FlowersshoesCoreMVC.Controllers
             }
 
 
+
+            listacarrito = RecuperarCarrito();
+
+            decimal sumaSubtotales = 0;
+
+
+            foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
+            {
+                sumaSubtotales += item.Subtotal;
+            }
+
+            ViewBag.Total = sumaSubtotales;
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
             var viewmodel = new VentasVista
             {
                 nuevoCliente = new TbCliente(),
-                //listaDetaVenta = listavd
+                listaDetaVenta = listacarrito
             };
 
             return View("Index", viewmodel);
@@ -236,10 +460,34 @@ namespace FlowersshoesCoreMVC.Controllers
             }
 
 
+            listacarrito = RecuperarCarrito();
+
+            decimal sumaSubtotales = 0;
+
+
+            foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
+            {
+                sumaSubtotales += item.Subtotal;
+            }
+
+            ViewBag.Total = sumaSubtotales;
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
             var viewmodel = new VentasVista
             {
                 nuevoCliente = new TbCliente(),
-                //listaDetaVenta = listavd
+                listaDetaVenta = listacarrito
             };
 
             return View("Index", viewmodel);
