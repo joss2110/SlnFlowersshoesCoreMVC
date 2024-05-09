@@ -13,7 +13,7 @@ namespace FlowersshoesCoreMVC.DAO
             cad_cn = cfg.GetConnectionString("cn1");
         }
 
-        public string GererarVenta( int idtra,int idcli, List<TbDetalleVenta> detaVenta)
+        public string GererarVenta(int idtra, int idcli, List<TbDetalleVenta> detaVenta)
         {
             string resultado = "";
 
@@ -21,7 +21,7 @@ namespace FlowersshoesCoreMVC.DAO
             parametros.Add(new KeyValuePair<string, object>("@idtra", idtra));
             parametros.Add(new KeyValuePair<string, object>("@idcli", idcli));
 
-          
+
 
             try
             {
