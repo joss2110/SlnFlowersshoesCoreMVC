@@ -17,8 +17,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                
                 var respuesta =
-                    await httpcliente.GetAsync(
-                        "http://localhost:5050/api/Clientes/GetClientes");             
+                    await httpcliente.GetAsync("http://localhost:5050/api/Clientes/GetClientes");             
                 string respuestaAPI = await respuesta.Content.ReadAsStringAsync();              
                 return JsonConvert.DeserializeObject<List<TbCliente>>(respuestaAPI)!;
             }
