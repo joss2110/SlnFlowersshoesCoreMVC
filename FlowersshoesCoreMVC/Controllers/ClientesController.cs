@@ -267,6 +267,22 @@ namespace FlowersshoesCoreMVC.Controllers
             return View("Clientes", viewmodel);
         }
 
+        public async Task<ActionResult> TuAccion()
+        {
+            // Supongamos que tienes una lista de objetos que quieres mostrar en el SelectList
+            var datos = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "DNI" },
+            new SelectListItem { Value = "2", Text = "Pasaporter" },
+            new SelectListItem { Value = "3", Text = "Carnet de Extrangeria" },
+            new SelectListItem { Value = "4", Text = "DNI Electronico" }
+        };
+
+            // Puedes pasar los datos a la vista usando ViewBag
+            ViewBag.Datos = datos;
+
+            return View();
+        }
 
     }
 }
