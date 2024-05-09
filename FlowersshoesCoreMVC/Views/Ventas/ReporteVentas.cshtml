@@ -295,11 +295,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.estado)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+                <td class="text-center">
+                    @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Editar" }, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
+                </td>
+                <td class="text-center">
+                    @if (item.Estado == "Activo")
+                    {
+                        @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Eliminar" }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Restaurar" }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
+                    }
+                </td>
         </tr>
 }
     </tbody>
