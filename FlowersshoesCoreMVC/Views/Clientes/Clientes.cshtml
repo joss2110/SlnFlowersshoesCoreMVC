@@ -413,7 +413,7 @@ else if (ViewBag.abrirModal == "Restaurar")
     $(document).ready(function () {
         var filtroActual = '';
 
-        $('#filtroColor').on('input', function () {
+        $('#filtroCliente').on('input', function () {
             filtroActual = $(this).val().toLowerCase();
             filtrarFilas();
         });
@@ -421,8 +421,8 @@ else if (ViewBag.abrirModal == "Restaurar")
         $('#toggleInactive').on('click', function () {
             var iconoMostrar = $('#iconoMostrar');
             var ocultarInactivos = !$(this).hasClass('activo');
-            $('#tablaColores tbody tr').each(function () {
-                var estado = $(this).find('td:nth-child(3)').text().trim();
+            $('#tablaClientes tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(8)').text().trim();
                 if (estado === 'Inactivo') {
                     $(this).toggle(ocultarInactivos);
                 }
@@ -437,8 +437,8 @@ else if (ViewBag.abrirModal == "Restaurar")
         });
 
         function filtrarFilas() {
-            $('#tablaColores tbody tr').each(function () {
-                var estado = $(this).find('td:nth-child(3)').text().trim();
+            $('#tablaClientes tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(8)').text().trim();
                 var cumpleFiltro = true;
                 if (filtroActual !== '') {
                     cumpleFiltro = $(this).find('td:nth-child(2)').text().toLowerCase().indexOf(filtroActual) > -1;
