@@ -1,0 +1,346 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.ReporteVentasVista
+
+@{
+    ViewData["Title"] = "ReporteVentas";
+}
+
+<div class="modal fade" id="DetalleVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                            <input asp-for="editventa.idventa" class="form-control" readonly />
+                            <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="editventa.trabajador" class="control-label">Color</label>
+                            <input asp-for="editventa.trabajador" class="form-control" readonly />
+                            <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="editventa.cliente" class="control-label">Color</label>
+                            <input asp-for="editventa.cliente" class="form-control" readonly />
+                            <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="editventa.fecha" class="control-label">Color</label>
+                            <input asp-for="editventa.fecha" class="form-control" readonly />
+                            <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="editventa.estadoComprobante" class="control-label">Color</label>
+                            <input asp-for="editventa.estadoComprobante" class="form-control" readonly />
+                            <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="editventa.estado" class="control-label">Color</label>
+                            <input asp-for="editventa.estado" class="form-control" readonly />
+                            <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Imagen
+                                    </th>
+                                    <th>
+                                        Modelo
+                                    </th>
+                                    <th>
+                                        Color
+                                    </th>
+                                    <th>
+                                        Talla
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+                                    <th>
+                                        PrecioUnitario
+                                    </th>
+                                    <th>
+                                        Subtotal
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.listaDetaVenta)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.imagen)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.nompro)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.color)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.talla)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.cantidad)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Preciouni)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Subtotal)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <label asp-for="editventa.total" class="control-label">Color</label>
+                            <input asp-for="editventa.total" class="form-control" readonly />
+                            <span asp-validation-for="editventa.total" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EliminarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Eliminar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                                <input asp-for="editventa.idventa" class="form-control" readonly />
+                                <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.trabajador" class="control-label">Color</label>
+                                <input asp-for="editventa.trabajador" class="form-control" readonly />
+                                <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="editventa.cliente" class="control-label">Color</label>
+                                <input asp-for="editventa.cliente" class="form-control" readonly />
+                                <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.fecha" class="control-label">Color</label>
+                                <input asp-for="editventa.fecha" class="form-control" readonly />
+                                <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.total" class="control-label">Color</label>
+                                <input asp-for="editventa.total" class="form-control" readonly />
+                                <span asp-validation-for="editventa.total" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.estadoComprobante" class="control-label">Color</label>
+                                <input asp-for="editventa.estadoComprobante" class="form-control" readonly />
+                                <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.estado" class="control-label">Color</label>
+                                <input asp-for="editventa.estado" class="form-control" readonly />
+                                <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Eliminar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="RestaurarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
+                <button id="btn-close-restaurar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="Restaurar" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                                <input asp-for="editventa.idventa" class="form-control" readonly />
+                                <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.trabajador" class="control-label">Color</label>
+                                <input asp-for="editventa.trabajador" class="form-control" readonly />
+                                <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="editventa.cliente" class="control-label">Color</label>
+                                <input asp-for="editventa.cliente" class="form-control" readonly />
+                                <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.fecha" class="control-label">Color</label>
+                                <input asp-for="editventa.fecha" class="form-control" readonly />
+                                <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.total" class="control-label">Color</label>
+                                <input asp-for="editventa.total" class="form-control" readonly />
+                                <span asp-validation-for="editventa.total" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.estadoComprobante" class="control-label">Color</label>
+                                <input asp-for="editventa.estadoComprobante" class="form-control" readonly />
+                                <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.estado" class="control-label">Color</label>
+                                <input asp-for="editventa.estado" class="form-control" readonly />
+                                <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group pt-3">
+                                <input type="submit" value="Restaurar" class="btn bgRosa w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               id
+            </th>
+            <th>
+                Trabajador
+            </th>
+            <th>
+                Cliente
+            </th>
+            <th>
+                Fecha
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                Estado de Comprobante
+            </th>
+            <th>
+                Estado
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listaVenta)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idventa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.trabajador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cliente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.estadoComprobante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.estado)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@if (ViewBag.abrirModal == "DetalleVenta")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EditarCli').modal('show');
+            }, 500);
+            $('#btn-close-editar').on('click', function () {
+                window.location.href = '/Ventas/Index';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Eliminar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EliminarColor').modal('show');
+            }, 500);
+            $('#btn-close-eliminar').on('click', function () {
+                window.location.href = '/Colores/Colores';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "Restaurar")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#RestaurarColor').modal('show');
+            }, 500);
+            $('#btn-close-restaurar').on('click', function () {
+                window.location.href = '/Colores/Colores';
+            });
+        });
+    </script>
+}

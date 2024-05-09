@@ -67,6 +67,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
         List<PA_LISTAR_DETALLE_VENTAS> listacarrito = new List<PA_LISTAR_DETALLE_VENTAS>();
         TbCliente clienteActual = new TbCliente();
+        TbTrabajadore trabajadorActual = new TbTrabajadore();
 
         TbCliente? RecuperarCliente()
         {
@@ -123,11 +124,22 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
         // GET: VentasController
-        public ActionResult Index(string nrodoc, int id, string accion)
+        public ActionResult Index( int id, string accion)
         {
             VentasVista viewmodel;
-           
-            
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
             ViewBag.abrirModal = "No";
 
             listacarrito = RecuperarCarrito();
@@ -161,36 +173,24 @@ namespace FlowersshoesCoreMVC.Controllers
                 ViewBag.abrirModal = accion;
             }
 
-            if (nrodoc != null)
-            {
-                clienteActual = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
-                GrabarCliente();
-            }
-            
-
-            clienteActual = RecuperarCliente()!;
-
-            if (clienteActual != null)
-            {
-                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
-                ViewBag.IdCliente = clienteActual.Idcli;
-            }
-            else
-            {
-                ViewBag.NombreCliente = "Cliente no encontrado";
-            }
+           
 
             return View(viewmodel);
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GenerarVenta(string codbar)
+        public IActionResult GenerarVenta()
         {
 
             clienteActual = RecuperarCliente()!;
             listacarrito = RecuperarCarrito();
-            if (clienteActual != null && listacarrito !=null)
+           trabajadorActual = db.TbTrabajadores.Find(1)!;
+
+
+            if (clienteActual != null && listacarrito.Count > 0)
             {
                 List<TbDetalleVenta> lista = new List<TbDetalleVenta>();
                 
@@ -208,40 +208,26 @@ namespace FlowersshoesCoreMVC.Controllers
                     lista.Add(dv);
                 }
 
+                try
+                {
+                    TempData["mensaje"] = dao.GererarVenta(trabajadorActual.Idtra, clienteActual.Idcli, lista);
+
+                    listacarrito.Clear();
+                    GrabarCarrito();
+                    clienteActual = new TbCliente();
+
+                }catch (Exception ex)
+                {
+                    TempData["mensaje"] = ex.Message;
+                }
+
+
+
             }
-
-            TbProducto producto = db.TbProductos.FirstOrDefault(p => p.Codbar == codbar)!;
-
-            if (codbar != null)
+            else
             {
-                listacarrito = RecuperarCarrito(); 
-                var encontrado = listacarrito.Find(c => c.idpro == producto.Idpro);
-                if (encontrado == null)
-                {
-                    PA_LISTAR_DETALLE_VENTAS ldv = new PA_LISTAR_DETALLE_VENTAS()
-                    {
-                        imagen = producto.Imagen!,
-                        idpro = producto.Idpro,
-                        nompro = producto.Nompro,
-                        color = db.TbColores.Find(producto.Idcolor)!.Color,
-                        talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
-                        cantidad = 1,
-                        Preciouni = producto.Precio,
-                        Subtotal = producto.Precio
-                    };
-                    listacarrito.Add(ldv);
-                }
-                else
-                {
-                    encontrado.cantidad += 1;
-                    encontrado.Subtotal = encontrado.Preciouni * encontrado.cantidad;
-                }
-                GrabarCarrito();
-
+                TempData["mensaje"] = "NO se pudo realizar la venta, No olvide ingresar el cliente y agregar productos a su carrito";
             }
-
-
-
 
             listacarrito = RecuperarCarrito();
 
@@ -326,6 +312,60 @@ namespace FlowersshoesCoreMVC.Controllers
             ViewBag.Total = sumaSubtotales;
 
             clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
+            var viewmodel = new VentasVista
+            {
+                nuevoCliente = new TbCliente(),
+                listaDetaVenta = listacarrito
+            };
+
+            return View("Index", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BuscarCliente(string nrodoc)
+        {
+            if (nrodoc != null)
+            {
+                clienteActual = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
+                GrabarCliente();
+            }
+
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
+            listacarrito = RecuperarCarrito();
+
+            decimal sumaSubtotales = 0;
+
+
+            foreach (PA_LISTAR_DETALLE_VENTAS item in listacarrito)
+            {
+                sumaSubtotales += item.Subtotal;
+            }
+
+            ViewBag.Total = sumaSubtotales;
 
             if (clienteActual != null)
             {
@@ -493,7 +533,22 @@ namespace FlowersshoesCoreMVC.Controllers
             return View("Index", viewmodel);
         }
 
+        public ActionResult ReporteVentas ( int idventa)
+        {
 
+            List<PA_LISTAR_VENTAS> listav = dao.listarVentas();
+
+            List<PA_LISTAR_DETALLE_VENTAS> listavd = dao.listarDetaVentas(idventa);
+
+            var viewmodel = new ReporteVentasVista
+            {
+                editventa = new TbVenta(),
+                listaVenta = listav,
+                listaDetaVenta = listavd
+
+            };
+            return View(viewmodel);
+        }
 
     }
 }
