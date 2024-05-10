@@ -3,6 +3,8 @@ using FlowersshoesCoreMVC.Models;
 using FlowersshoesCoreMVC.Models.Vistas;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace FlowersshoesCoreMVC.Controllers
@@ -222,7 +224,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             clienteActual = RecuperarCliente()!;
             listacarrito = RecuperarCarrito();
-           trabajadorActual = RecuperarTrabajador()!;
+            trabajadorActual = RecuperarTrabajador()!;
 
 
             if (clienteActual != null && listacarrito.Count > 0)
@@ -293,6 +295,13 @@ namespace FlowersshoesCoreMVC.Controllers
                 nuevoCliente = new TbCliente(),
                 listaDetaVenta = listacarrito
             };
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
 
             return View("Index", viewmodel);
         }
@@ -301,38 +310,74 @@ namespace FlowersshoesCoreMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AgregarCarrito(string codbar)
         {
-            TbProducto producto = db.TbProductos.FirstOrDefault(p => p.Codbar == codbar)!;
 
             if (codbar != null)
             {
-                listacarrito = RecuperarCarrito();
-                var encontrado = listacarrito.Find(c => c.idpro == producto.Idpro);
-                if (encontrado == null)
+                TbProducto producto = db.TbProductos.FirstOrDefault(p => p.Codbar == codbar)!;
+
+               
+
+                if (producto != null)
                 {
-                    PA_LISTAR_DETALLE_VENTAS ldv = new PA_LISTAR_DETALLE_VENTAS()
+
+                   
+
+
+                    listacarrito = RecuperarCarrito();
+                    var encontrado = listacarrito.Find(c => c.idpro == producto.Idpro);
+                    if (encontrado == null)
                     {
-                        imagen = producto.Imagen!,
-                        idpro = producto.Idpro,
-                        nompro = producto.Nompro,
-                        color = db.TbColores.Find(producto.Idcolor)!.Color,
-                        talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
-                        cantidad = 1,
-                        Preciouni = producto.Precio,
-                        Subtotal = producto.Precio
-                    };
-                    listacarrito.Add(ldv);
+                        if (db.TbStocks.Find(producto.Idpro)!.Cantidad > 0)
+                        {
+                            PA_LISTAR_DETALLE_VENTAS ldv = new PA_LISTAR_DETALLE_VENTAS()
+                            {
+                                imagen = producto.Imagen!,
+                                idpro = producto.Idpro,
+                                nompro = producto.Nompro,
+                                color = db.TbColores.Find(producto.Idcolor)!.Color,
+                                talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
+                                cantidad = 1,
+                                Preciouni = producto.Precio,
+                                Subtotal = producto.Precio
+                            };
+                            listacarrito.Add(ldv);
+                        }
+                        else
+                        {
+                            TempData["mensaje"] = "El producto no tiene Stock";
+                        }
+
+                        
+                    }
+                    else
+                    {
+                        if (db.TbStocks.Find(producto.Idpro)!.Cantidad > encontrado.cantidad)
+                        {
+                            encontrado.cantidad += 1;
+                            encontrado.Subtotal = encontrado.Preciouni * encontrado.cantidad;
+                        }
+                        else
+                        {
+                            TempData["mensaje"] = "El producto solo tiene "+encontrado.cantidad+" unidades en Stock";
+                        }
+                            
+                    }
+                    GrabarCarrito();
+
                 }
                 else
                 {
-                    encontrado.cantidad += 1;
-                    encontrado.Subtotal = encontrado.Preciouni * encontrado.cantidad;
+                    TempData["mensaje"] = "producto no encontrado";
                 }
-                GrabarCarrito();
+
 
             }
-           
+            else
+            {
+                TempData["mensaje"] = "ingrese el codigo de barras";
 
-           
+            }
+
 
             listacarrito = RecuperarCarrito();
 
@@ -363,31 +408,51 @@ namespace FlowersshoesCoreMVC.Controllers
                 nuevoCliente = new TbCliente(),
                 listaDetaVenta = listacarrito
             };
+
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
 
             return View("Index", viewmodel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BuscarCliente(string nrodoc)
+        public IActionResult BuscarCliente(string nrodoc)
         {
+
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
             if (nrodoc != null)
             {
                 clienteActual = db.TbClientes.FirstOrDefault(c => c.Nrodocumento == nrodoc)!;
-                GrabarCliente();
-            }
+                if(clienteActual != null)
+                {
+                    GrabarCliente();
 
+                    ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                    ViewBag.IdCliente = clienteActual.Idcli;
+                }
+                else
+                {
+                    ViewBag.NombreCliente = "Cliente no encontrado";
+                }
 
-            clienteActual = RecuperarCliente()!;
-
-            if (clienteActual != null)
-            {
-                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
-                ViewBag.IdCliente = clienteActual.Idcli;
             }
             else
             {
                 ViewBag.NombreCliente = "Cliente no encontrado";
+                TempData["mensaje"] = "Ingrese numero de documento";
             }
 
             listacarrito = RecuperarCarrito();
@@ -402,21 +467,13 @@ namespace FlowersshoesCoreMVC.Controllers
 
             ViewBag.Total = sumaSubtotales;
 
-            if (clienteActual != null)
-            {
-                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
-                ViewBag.IdCliente = clienteActual.Idcli;
-            }
-            else
-            {
-                ViewBag.NombreCliente = "Cliente no encontrado";
-            }
-
             var viewmodel = new VentasVista
             {
                 nuevoCliente = new TbCliente(),
                 listaDetaVenta = listacarrito
             };
+
+            
 
             return View("Index", viewmodel);
         }
@@ -492,6 +549,14 @@ namespace FlowersshoesCoreMVC.Controllers
                 listaDetaVenta = listacarrito
             };
 
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
             return View("Index", viewmodel);
         }
 
@@ -565,26 +630,206 @@ namespace FlowersshoesCoreMVC.Controllers
                 listaDetaVenta = listacarrito
             };
 
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
             return View("Index", viewmodel);
         }
 
 
 
-        public ActionResult ReporteVentas ( int idventa)
+        public ActionResult ReporteVentas ( int id , string accion)
         {
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
+            ReporteVentasVista viewmodel;
 
             List<PA_LISTAR_VENTAS> listav = dao.listarVentas();
 
-            List<PA_LISTAR_DETALLE_VENTAS> listavd = dao.listarDetaVentas(idventa);
+            
 
-            var viewmodel = new ReporteVentasVista
+            List <PA_LISTAR_DETALLE_VENTAS> listavd = dao.listarDetaVentas(id);
+           
+            
+
+            if (id == 0)
             {
+                viewmodel = new ReporteVentasVista
+                {
+
+                    editventa = new PA_LISTAR_VENTAS(),
+                    listaVenta = listav,
+                    listaDetaVenta = new List<PA_LISTAR_DETALLE_VENTAS>()
+                };
+            }
+            else
+            {
+                viewmodel = new ReporteVentasVista
+                {
+                    editventa = listav.Find(v => v.idventa == id)!,
+                    listaVenta = listav,
+                    listaDetaVenta = listavd
+                };
+                ViewBag.abrirModal = accion;
+            }
+
+
+            return View("ReporteVentas", viewmodel);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditarVenta(ReporteVentasVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    
+
+                    TbVenta venta = db.TbVentas.Find(model.editventa.idventa)!;
+
+                    if(venta != null)
+                    {
+                        venta.EstadoComprobante = model.editventa.estadoComprobante;
+                        TempData["mensaje"] = dao.EditarVenta(venta.Idventa, venta.EstadoComprobante);
+
+                    }
+
+                    return RedirectToAction(nameof(ReporteVentas));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            ReporteVentasVista viewmodel;
+
+            List<PA_LISTAR_VENTAS> listav = dao.listarVentas();
+
+            viewmodel = new ReporteVentasVista
+            {
+
                 editventa = new PA_LISTAR_VENTAS(),
                 listaVenta = listav,
-                listaDetaVenta = listavd
-
+                listaDetaVenta = new List<PA_LISTAR_DETALLE_VENTAS>()
             };
-            return View(viewmodel);
+
+            return View("ReporteVentas", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarVenta(ReporteVentasVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+
+
+                    TbVenta venta = db.TbVentas.Find(model.editventa.idventa)!;
+
+                    List<TbDetalleVenta> detallesVenta = db.TbDetalleVentas.Where(detalle => detalle.Idventa == 1).ToList();
+
+
+                    if (venta != null && detallesVenta !=null)
+                    {
+                        venta.EstadoComprobante = model.editventa.estadoComprobante;
+                        TempData["mensaje"] = dao.EliminarVenta(venta.Idventa, detallesVenta);
+
+                    }
+
+                    return RedirectToAction(nameof(ReporteVentas));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo eliminar el registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            ReporteVentasVista viewmodel;
+
+            List<PA_LISTAR_VENTAS> listav = dao.listarVentas();
+
+            viewmodel = new ReporteVentasVista
+            {
+
+                editventa = new PA_LISTAR_VENTAS(),
+                listaVenta = listav,
+                listaDetaVenta = new List<PA_LISTAR_DETALLE_VENTAS>()
+            };
+
+            return View("ReporteVentas", viewmodel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RestaurarVenta(ReporteVentasVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+
+
+                    TbVenta venta = db.TbVentas.Find(model.editventa.idventa)!;
+
+                    List<TbDetalleVenta> detallesVenta = db.TbDetalleVentas.Where(detalle => detalle.Idventa == 1).ToList();
+
+
+                    if (venta != null && detallesVenta != null)
+                    {
+                        venta.EstadoComprobante = model.editventa.estadoComprobante;
+                        TempData["mensaje"] = dao.RestaurarVenta(venta.Idventa, detallesVenta);
+
+                    }
+
+                    return RedirectToAction(nameof(ReporteVentas));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo restaurar el registro, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            ReporteVentasVista viewmodel;
+
+            List<PA_LISTAR_VENTAS> listav = dao.listarVentas();
+
+            viewmodel = new ReporteVentasVista
+            {
+
+                editventa = new PA_LISTAR_VENTAS(),
+                listaVenta = listav,
+                listaDetaVenta = new List<PA_LISTAR_DETALLE_VENTAS>()
+            };
+
+            return View("ReporteVentas", viewmodel);
         }
 
     }

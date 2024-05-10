@@ -31,7 +31,26 @@ namespace FlowersshoesCoreMVC.DAO
                 {
                     SqlHelper.ExecuteNonQuery(cad_cn, "PA_GRABAR_DETALLE_VENTA", idventa, item.Idpro, item.Cantidad, item.Preciouni, item.Subtotal);
                 }
-                resultado = "La venta se realzo con exito!";
+                resultado = "La venta se realizo con exito!!";
+
+            }
+            catch (Exception ex)
+            {
+                resultado = ex.Message;
+            }
+
+            return resultado;
+        }
+
+        public string EditarVenta(int idventa, string estadoComprobante)
+        {
+            string resultado = "";
+
+            try
+            {
+                SqlHelper.ExecuteNonQuery(cad_cn, "PA_EDITAR_VENTA", idventa,estadoComprobante);
+     
+                resultado = "La venta se edito con exito!!";
 
             }
             catch (Exception ex)
@@ -96,6 +115,57 @@ namespace FlowersshoesCoreMVC.DAO
 
             return lista;
         }
+
+        public string EliminarVenta(int idventa, List<TbDetalleVenta> detaVenta)
+        {
+            string mensaje = "";
+
+            try
+            {
+                SqlHelper.ExecuteNonQuery(cad_cn, "PA_ELIMINAR_VENTA", idventa);
+
+                foreach(var item in detaVenta)
+                {
+                    SqlHelper.ExecuteNonQuery(cad_cn, "PA_ELIMINAR_DETALLE_VENTA", item.Idpro, item.Cantidad);
+                }
+
+                mensaje = "La Venta ha sido Eliminada con Exito";
+
+            }catch (Exception ex)
+            {
+                mensaje = ex.Message;
+            }
+             
+            return mensaje;
+
+        }
+
+        public string RestaurarVenta(int idventa, List<TbDetalleVenta> detaVenta)
+        {
+            string mensaje = "";
+
+            try
+            {
+                SqlHelper.ExecuteNonQuery(cad_cn, "PA_RESTAURAR_VENTA", idventa);
+
+                foreach (var item in detaVenta)
+                {
+                    SqlHelper.ExecuteNonQuery(cad_cn, "PA_RESTAURAR_DETALLE_VENTA", item.Idpro, item.Cantidad);
+                }
+
+                mensaje = "La Venta ha sido Restaurada con Exito";
+
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+            }
+
+            return mensaje;
+
+        }
+
+
 
 
     }

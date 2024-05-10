@@ -5,12 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Text;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FlowersshoesCoreMVC.Controllers
 {
     public class ProductosController : Controller
     {
         List<PA_LISTAR_PRODUCTOS> lista = new List<PA_LISTAR_PRODUCTOS>();
+
+        private readonly IWebHostEnvironment _env;
+        private readonly flowersshoesContext db;
+        public ProductosController(IWebHostEnvironment env, flowersshoesContext ctx)
+        {
+            _env = env;
+            db = ctx;
+        }
+
+       
 
         public async Task<List<PA_LISTAR_PRODUCTOS>> GetProductos()
         {
@@ -111,8 +122,10 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 if (option == 1)
                 {
-                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Productos/DeleteProductos/{id}");
+
+                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Productos/EliminarProducto/{id}");
                     cadena = await respuesta.Content.ReadAsStringAsync();
+                    
                 }
                 else
                 {
@@ -123,17 +136,6 @@ namespace FlowersshoesCoreMVC.Controllers
 
             return cadena;
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -173,35 +175,8 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private readonly flowersshoesContext db;
-
-
-
-
-
-        public ProductosController(flowersshoesContext ctx)
-        {
-            db = ctx;
-        }
-
-
-
         [HttpGet]
-        public async Task<IActionResult> Productos(int id, string accion)
+        public async Task<IActionResult> Productos(int id, string accion, string cacheBuster)
         {
             trabajadorActual = RecuperarTrabajador()!;
 
@@ -246,23 +221,48 @@ namespace FlowersshoesCoreMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Agregar(ProductosVista model)
+        public async Task<IActionResult> Agregar(ProductosVista model,  IFormFile imagenInput )
         {
-            try
+
+            TbProducto nuevoProducto = model.NuevoProductos;
+
+            if (imagenInput != null && imagenInput.Length > 0)
             {
                 
-                    TbProducto nuevoProducto = model.NuevoProductos;
+                if (imagenInput.ContentType.StartsWith("image/"))
+                {
+                    
+                    var nombreImagen = nuevoProducto.Nompro+nuevoProducto.Idtalla+nuevoProducto.Idcolor+".jpg";
 
-                    TempData["mensaje"] = await CrearProducto(nuevoProducto);
+                   
+                    var rutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nombreImagen);
 
-                    return RedirectToAction(nameof(Productos));
+                    
+                    using (var stream = new FileStream(rutaImagen, FileMode.Create))
+                    {
+                        await imagenInput.CopyToAsync(stream);
+                    }
+                    try
+                    {
 
-
+                        TempData["mensaje"] = await CrearProducto(nuevoProducto); ;
+                        return RedirectToAction(nameof(Productos));
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["mensaje"] = "Error: " + ex.Message;
+                    }
+                }
+                else
+                {
+                    TempData["mensaje"] = "El archivo no es una imagen válida.";
+                }
             }
-            catch (Exception ex)
+            else
             {
-                TempData["mensaje"] = "Error: " + ex.Message;
+                TempData["mensaje"] = "Agregue una imagen";
             }
+
 
             lista = await GetProductos();
 
@@ -280,24 +280,68 @@ namespace FlowersshoesCoreMVC.Controllers
             return View("Productos", viewmodel);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(ProductosVista model)
+        public async Task<IActionResult> Editar(ProductosVista model, IFormFile imagenInputEdit)
         {
-            try
+
+            TbProducto nuevoProducto = model.NuevoProductos;
+
+            if (imagenInputEdit != null && imagenInputEdit.Length > 0)
             {
-               
-                    TbProducto nuevoProducto = model.NuevoProductos;
+
+                if (imagenInputEdit.ContentType.StartsWith("image/"))
+                {
+
+                    var nombreImagen = nuevoProducto.Nompro + nuevoProducto.Idtalla + nuevoProducto.Idcolor + ".jpg";
+                    var rutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nombreImagen);
+
+                    // Se utiliza FileMode.Create para reemplazar el archivo si ya existe
+                    using (var stream = new FileStream(rutaImagen, FileMode.Create))
+                    {
+                        await imagenInputEdit.CopyToAsync(stream);
+                    }
+
+                    try
+                    {
+                        TempData["mensaje"] = await EditarProducto(nuevoProducto);
+
+                        return RedirectToAction(nameof(Productos), new { cacheBuster = Guid.NewGuid().ToString() });
+
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["mensaje"] = "Error: " + ex.Message;
+                    }
+                }
+                else
+                {
+
+
+                    TempData["mensaje"] = "El archivo no es una imagen válida.";
+                }
+            }
+            else
+            {
+                TbProducto prodbusc = db.TbProductos.Find(nuevoProducto.Idpro)!;
+
+                var rutaImagenAnterior = Path.Combine(_env.WebRootPath, "ImagenesProductos", prodbusc.Imagen!);
+
+                if (System.IO.File.Exists(rutaImagenAnterior))
+                {
+                    var nuevoNombreImagen = nuevoProducto.Nompro + nuevoProducto.Idtalla + nuevoProducto.Idcolor + ".jpg";
+                    var nuevaRutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nuevoNombreImagen);
+
+                    System.IO.File.Move(rutaImagenAnterior, nuevaRutaImagen);
+
 
                     TempData["mensaje"] = await EditarProducto(nuevoProducto);
-
                     return RedirectToAction(nameof(Productos));
-                
+                }
             }
-            catch (Exception ex)
-            {
-                TempData["mensaje"] = "Error: " + ex.Message;
-            }
+
+
 
             lista = await GetProductos();
 
@@ -314,6 +358,8 @@ namespace FlowersshoesCoreMVC.Controllers
 
             return View("Productos", viewmodel);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -344,6 +390,8 @@ namespace FlowersshoesCoreMVC.Controllers
 
             return View("Productos", viewmodel);
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Restaurar(ProductosVista model)

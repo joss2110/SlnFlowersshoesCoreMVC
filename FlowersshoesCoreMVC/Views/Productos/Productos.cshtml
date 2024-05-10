@@ -33,16 +33,31 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form asp-action="Agregar" method="post">
+                        <form asp-action="Agregar" method="post" enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Imagen" class="control-label">Imagen</label>
-                                <input type="file" id="imagenInput" name="imagenInput" accept="image/jpg" class="form-control-file" />
+                                <input asp-for="NuevoProductos.Imagen" type="file" id="imagenInput" name="imagenInput" accept="image/jpg" class="form-control" />
                                 <span asp-validation-for="NuevoProductos.Imagen" class="text-danger"></span>
                             </div>
 
                             <!-- Vista previa de la imagen -->
-                            <div id="vistaPreviaImagen"></div>
+                            <div id="vistaPreviaImagen" style="max-width:100%;"></div>
+                            <style>
+                                #vistaPreviaImagen
+                                {
+                                    max-width: 100%;
+                                    justify-content: center;
+                                    display: flex;
+                                }
+
+                                #vistaPreviaImagen img
+                                {
+                                    max-width: 50%;
+                                    margin-top: 20px;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
 
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Nompro" class="control-label">Nombre De Producto</label>
@@ -113,7 +128,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form asp-action="Editar" method="post">
+                        <form asp-action="Editar" method="post" enctype="multipart/form-data">
 
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
@@ -128,12 +143,31 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Imagen" class="control-label">Imagen</label>
-                                <input type="file" id="imagenInput" name="imagenInput" accept="image/jpg" class="form-control-file" />
+                                <input asp-for="NuevoProductos.Imagen" type="file" id="imagenInputEdit" name="imagenInputEdit" accept="image/jpg" class="form-control" />
                                 <span asp-validation-for="NuevoProductos.Imagen" class="text-danger"></span>
                             </div>
 
                             <!-- Vista previa de la imagen -->
-                            <div id="vistaPreviaImagen"></div>
+                            <div id="vistaPreviaEditImagen"></div>
+
+                            <style>
+                                #vistaPreviaEditImagen {
+                                    max-width: 100%;
+                                    justify-content: center;
+                                    display: flex;
+                                }
+
+                                #vistaPreviaEditImagen img {
+                                        max-width: 50%;
+                                    margin-top: 20px;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
+
+                            <div  style=" max-width: 100%; justify-content: center; display: flex;">
+                                <img id="ImagenActual" class="img-thumbnail" src="@Url.Content("/ImagenesProductos/"+Model.NuevoProductos.Imagen)"
+                                        alt="@Model.NuevoProductos.Imagen" style=" max-width: 50%; margin-top: 20px; margin-bottom: 20px;" />
+                            </div>
 
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Nompro" class="control-label">Nombre De Producto</label>
@@ -403,7 +437,9 @@
                     @Html.DisplayFor(modelItem => item.codbar)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.imagen)
+                    <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                         alt="@item.imagen" style="width:auto;height:80px" />
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.nompro)
@@ -487,6 +523,9 @@ else if (ViewBag.abrirModal == "Restaurar")
 }
 <script>
     $(document).ready(function () {
+
+        
+
         var filtroActual = '';
 
         $('#filtroColor').on('input', function () {
@@ -526,14 +565,15 @@ else if (ViewBag.abrirModal == "Restaurar")
     });
 </script>
 <script>
-    document.getElementById('imagenInput').addEventListener('change', function (event) {
+    $('#imagenInputEdit').change(function (event) {
         var archivo = event.target.files[0];
         var reader = new FileReader();
-
+        $('#ImagenActual').hide();
         reader.onload = function (e) {
-            var vistaPrevia = document.getElementById('vistaPreviaImagen');
-            vistaPrevia.innerHTML = '<img src="' + e.target.result + '" class="img-thumbnail" />';
-        }
+            
+            var vistaPrevia = $('#vistaPreviaEditImagen');
+            vistaPrevia.html('<img src="' + e.target.result + '" class="img-thumbnail" />');
+        };
 
         reader.readAsDataURL(archivo);
     });

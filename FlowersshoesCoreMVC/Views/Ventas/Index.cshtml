@@ -186,7 +186,8 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.imagen)
+                <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                        alt="@item.imagen" style="width:auto;height:80px" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.nompro)

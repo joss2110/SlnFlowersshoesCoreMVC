@@ -4,237 +4,534 @@
     ViewData["Title"] = "ReporteVentas";
 }
 
-<div class="modal fade" id="DetalleVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detalle de venta</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="editventa.idventa" class="control-label">Codigo</label>
-                            <input asp-for="editventa.idventa" class="form-control" readonly />
-                            <span asp-validation-for="editventa.idventa" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="editventa.trabajador" class="control-label">Color</label>
-                            <input asp-for="editventa.trabajador" class="form-control" readonly />
-                            <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
-                        </div>
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Reportes</h3>
 
-                        <div class="form-group">
-                            <label asp-for="editventa.cliente" class="control-label">Color</label>
-                            <input asp-for="editventa.cliente" class="form-control" readonly />
-                            <span asp-validation-for="editventa.cliente" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="editventa.fecha" class="control-label">Color</label>
-                            <input asp-for="editventa.fecha" class="form-control" readonly />
-                            <span asp-validation-for="editventa.fecha" class="text-danger"></span>
-                        </div>
+<div class="d-flex justify-content-between">
+    <h4>Ventas</h4>
+</div>
 
-                        <div class="form-group">
-                            <label asp-for="editventa.estadoComprobante" class="control-label">Color</label>
-                            <input asp-for="editventa.estadoComprobante" class="form-control" readonly />
-                            <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="editventa.estado" class="control-label">Color</label>
-                            <input asp-for="editventa.estado" class="form-control" readonly />
-                            <span asp-validation-for="editventa.estado" class="text-danger"></span>
-                        </div>
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Imagen
-                                    </th>
-                                    <th>
-                                        Modelo
-                                    </th>
-                                    <th>
-                                        Color
-                                    </th>
-                                    <th>
-                                        Talla
-                                    </th>
-                                    <th>
-                                        Cantidad
-                                    </th>
-                                    <th>
-                                        PrecioUnitario
-                                    </th>
-                                    <th>
-                                        Subtotal
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.listaDetaVenta)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.imagen)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.nompro)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.color)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.talla)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.cantidad)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Preciouni)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Subtotal)
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <div class="form-group">
-                            <label asp-for="editventa.total" class="control-label">Color</label>
-                            <input asp-for="editventa.total" class="form-control" readonly />
-                            <span asp-validation-for="editventa.total" class="text-danger"></span>
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="modal fade" id="MostrarDetalle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                                <input asp-for="editventa.idventa" class="form-control" readonly />
+                                <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.trabajador" class="control-label">Trabajador</label>
+                                <input asp-for="editventa.trabajador" class="form-control" readonly />
+                                <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="editventa.cliente" class="control-label">Cliente</label>
+                                <input asp-for="editventa.cliente" class="form-control" readonly />
+                                <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.fecha" class="control-label">Fecha y hora</label>
+                                <input asp-for="editventa.fecha" class="form-control" readonly />
+                                <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="editventa.estadoComprobante" class="control-label">Estado de Comprobante</label>
+                                <select asp-for="editventa.estadoComprobante" class="form-control" disabled>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Realizado">Realizado</option>
+                                    <option value="Enviado">Enviado</option>
+                                </select>
+                                <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="editventa.estado" class="control-label">Estado</label>
+                                <input asp-for="editventa.estado" class="form-control" readonly />
+                                <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                            </div>
+
+                            <div class="py-4 border-bottom text-center">
+                                <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                            </div>
+
+                            <div class="overflow-auto py-2 mb-4">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Imagen
+                                            </th>
+                                            <th>
+                                                Modelo
+                                            </th>
+                                            <th>
+                                                Color
+                                            </th>
+                                            <th>
+                                                Talla
+                                            </th>
+                                            <th>
+                                                Cantidad
+                                            </th>
+                                            <th>
+                                                PrecioUnitario
+                                            </th>
+                                            <th>
+                                                Subtotal
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.listaDetaVenta)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                                                         alt="@item.imagen" style="width:auto;height:80px" />
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.nompro)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.color)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.talla)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.cantidad)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Preciouni)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Subtotal)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-end mt-2">
+                                <label class="ms-3 " style=" font-size: 1rem;">Total:</label>
+                                <input asp-for="editventa.total" class="ms-3 bgRosa px-3 py-1 rounded-pill" style=" font-size: 1.2rem;width: 100px;text-align: center;border: none;" readonly />
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+   
+</div>
+
+<div class="modal fade" id="EditarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="EditarVenta" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                                    <input asp-for="editventa.idventa" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.trabajador" class="control-label">Trabajador</label>
+                                    <input asp-for="editventa.trabajador" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="editventa.cliente" class="control-label">Cliente</label>
+                                    <input asp-for="editventa.cliente" class="form-control" />
+                                    <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.fecha" class="control-label">Fecha y hora</label>
+                                    <input asp-for="editventa.fecha" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="editventa.estadoComprobante" class="control-label">Estado de Comprobante</label>
+                                    <select asp-for="editventa.estadoComprobante" class="form-control" >
+                                        <option value="" disabled>Selecciona una opción</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="Realizado">Realizado</option>
+                                        <option value="Enviado">Enviado</option>
+                                    </select>
+                                    <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.estado" class="control-label">Estado</label>
+                                    <input asp-for="editventa.estado" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                                </div>
+
+                                <div class="py-4 border-bottom text-center">
+                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                </div>
+
+                                <div class="overflow-auto py-2 mb-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Imagen
+                                                </th>
+                                                <th>
+                                                    Modelo
+                                                </th>
+                                                <th>
+                                                    Color
+                                                </th>
+                                                <th>
+                                                    Talla
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    PrecioUnitario
+                                                </th>
+                                                <th>
+                                                    Subtotal
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.listaDetaVenta)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                                                             alt="@item.imagen" style="width:auto;height:80px" />
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.nompro)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.color)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.talla)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.cantidad)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Preciouni)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Subtotal)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-end mt-2">
+                                    <label class="ms-3 " style=" font-size: 1rem;">Total:</label>
+                                    <input asp-for="editventa.total" class="ms-3 bgRosa px-3 py-1 rounded-pill" style=" font-size: 1.2rem;width: 100px;text-align: center;border: none;" readonly />
+                                </div>
+
+                                <div class="form-group pt-3">
+                                    <input type="submit" value="Guardar Cambios" class="btn bgRosa w-100" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="modal fade" id="EliminarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
-                <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form asp-action="Eliminar" method="post">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="EliminarVenta" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                                    <input asp-for="editventa.idventa" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.trabajador" class="control-label">Trabajador</label>
+                                    <input asp-for="editventa.trabajador" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                                </div>
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="editventa.idventa" class="control-label">Codigo</label>
-                                <input asp-for="editventa.idventa" class="form-control" readonly />
-                                <span asp-validation-for="editventa.idventa" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.trabajador" class="control-label">Color</label>
-                                <input asp-for="editventa.trabajador" class="form-control" readonly />
-                                <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
-                            </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.cliente" class="control-label">Cliente</label>
+                                    <input asp-for="editventa.cliente" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.fecha" class="control-label">Fecha y hora</label>
+                                    <input asp-for="editventa.fecha" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                                </div>
 
-                            <div class="form-group">
-                                <label asp-for="editventa.cliente" class="control-label">Color</label>
-                                <input asp-for="editventa.cliente" class="form-control" readonly />
-                                <span asp-validation-for="editventa.cliente" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.fecha" class="control-label">Color</label>
-                                <input asp-for="editventa.fecha" class="form-control" readonly />
-                                <span asp-validation-for="editventa.fecha" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.total" class="control-label">Color</label>
-                                <input asp-for="editventa.total" class="form-control" readonly />
-                                <span asp-validation-for="editventa.total" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.estadoComprobante" class="control-label">Color</label>
-                                <input asp-for="editventa.estadoComprobante" class="form-control" readonly />
-                                <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.estado" class="control-label">Color</label>
-                                <input asp-for="editventa.estado" class="form-control" readonly />
-                                <span asp-validation-for="editventa.estado" class="text-danger"></span>
-                            </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.estadoComprobante" class="control-label">Estado de Comprobante</label>
+                                    <select asp-for="editventa.estadoComprobante" class="form-control" disabled>
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="Realizado">Realizado</option>
+                                        <option value="Enviado">Enviado</option>
+                                    </select>
+                                    <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.estado" class="control-label">Estado</label>
+                                    <input asp-for="editventa.estado" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                                </div>
 
-                            <div class="form-group pt-3">
-                                <input type="submit" value="Eliminar" class="btn bgRosa w-100" />
-                            </div>
-                        </form>
+                                <div class="py-4 border-bottom text-center">
+                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                </div>
+
+                                <div class="overflow-auto py-2 mb-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    Imagen
+                                                </td>
+                                                <th>
+                                                    Modelo
+                                                </th>
+                                                <th>
+                                                    Color
+                                                </th>
+                                                <th>
+                                                    Talla
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    PrecioUnitario
+                                                </th>
+                                                <th>
+                                                    Subtotal
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.listaDetaVenta)
+                                            {
+                                                <tr>
+                                                    <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                                                         alt="@item.imagen" style="width:auto;height:80px" />
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.nompro)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.color)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.talla)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.cantidad)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Preciouni)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Subtotal)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-end mt-2">
+                                    <label class="ms-3 " style=" font-size: 1rem;">Total:</label>
+                                    <input asp-for="editventa.total" class="ms-3 bgRosa px-3 py-1 rounded-pill" style=" font-size: 1.2rem;width: 100px;text-align: center;border: none;" readonly />
+                                </div>
+
+                                <div class="form-group pt-3">
+                                    <input type="submit" value="Eliminar" class="btn bgRosa w-100" />
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="modal fade" id="RestaurarVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar Color</h5>
-                <button id="btn-close-restaurar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form asp-action="Restaurar" method="post">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="RestaurarVenta" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.idventa" class="control-label">Codigo</label>
+                                    <input asp-for="editventa.idventa" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.idventa" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.trabajador" class="control-label">Trabajador</label>
+                                    <input asp-for="editventa.trabajador" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
+                                </div>
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="editventa.idventa" class="control-label">Codigo</label>
-                                <input asp-for="editventa.idventa" class="form-control" readonly />
-                                <span asp-validation-for="editventa.idventa" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.trabajador" class="control-label">Color</label>
-                                <input asp-for="editventa.trabajador" class="form-control" readonly />
-                                <span asp-validation-for="editventa.trabajador" class="text-danger"></span>
-                            </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.cliente" class="control-label">Cliente</label>
+                                    <input asp-for="editventa.cliente" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.cliente" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.fecha" class="control-label">Fecha y hora</label>
+                                    <input asp-for="editventa.fecha" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.fecha" class="text-danger"></span>
+                                </div>
 
-                            <div class="form-group">
-                                <label asp-for="editventa.cliente" class="control-label">Color</label>
-                                <input asp-for="editventa.cliente" class="form-control" readonly />
-                                <span asp-validation-for="editventa.cliente" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.fecha" class="control-label">Color</label>
-                                <input asp-for="editventa.fecha" class="form-control" readonly />
-                                <span asp-validation-for="editventa.fecha" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.total" class="control-label">Color</label>
-                                <input asp-for="editventa.total" class="form-control" readonly />
-                                <span asp-validation-for="editventa.total" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.estadoComprobante" class="control-label">Color</label>
-                                <input asp-for="editventa.estadoComprobante" class="form-control" readonly />
-                                <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="editventa.estado" class="control-label">Color</label>
-                                <input asp-for="editventa.estado" class="form-control" readonly />
-                                <span asp-validation-for="editventa.estado" class="text-danger"></span>
-                            </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.estadoComprobante" class="control-label">Estado de Comprobante</label>
+                                    <select asp-for="editventa.estadoComprobante" class="form-control" disabled>
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="Realizado">Realizado</option>
+                                        <option value="Enviado">Enviado</option>
+                                    </select>
+                                    <span asp-validation-for="editventa.estadoComprobante" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="editventa.estado" class="control-label">Estado</label>
+                                    <input asp-for="editventa.estado" class="form-control" readonly />
+                                    <span asp-validation-for="editventa.estado" class="text-danger"></span>
+                                </div>
 
-                            <div class="form-group pt-3">
-                                <input type="submit" value="Restaurar" class="btn bgRosa w-100" />
-                            </div>
-                        </form>
+                                <div class="py-4 border-bottom text-center">
+                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                </div>
+
+                                <div class="overflow-auto py-2 mb-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Imagen
+                                                </th>
+                                                <th>
+                                                    Modelo
+                                                </th>
+                                                <th>
+                                                    Color
+                                                </th>
+                                                <th>
+                                                    Talla
+                                                </th>
+                                                <th>
+                                                    Cantidad
+                                                </th>
+                                                <th>
+                                                    PrecioUnitario
+                                                </th>
+                                                <th>
+                                                    Subtotal
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.listaDetaVenta)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                                                             alt="@item.imagen" style="width:auto;height:80px" />
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.nompro)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.color)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.talla)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.cantidad)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Preciouni)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Subtotal)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-end mt-2">
+                                    <label class="ms-3 " style=" font-size: 1rem;">Total:</label>
+                                    <input asp-for="editventa.total" class="ms-3 bgRosa px-3 py-1 rounded-pill" style=" font-size: 1.2rem;width: 100px;text-align: center;border: none;" readonly />
+                                </div>
+
+                                <div class="form-group pt-3">
+                                    <input type="submit" value="Restaurar" class="btn bgRosa w-100" />
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -242,8 +539,10 @@
     </div>
 </div>
 
+<input type="date" id="fechaFiltro" class="form-control my-3">
 
-<table class="table">
+
+<table class="table" id="tablaVentas">
     <thead>
         <tr>
             <th>
@@ -262,12 +561,20 @@
                 Total
             </th>
             <th>
-                Estado de Comprobante
+                Comprobante
             </th>
             <th>
                 Estado
             </th>
-            <th></th>
+            <th>
+                Detalle
+            </th>
+            <th>
+                Editar
+            </th>
+            <th>
+                Eliminar
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -298,11 +605,31 @@
             <td class="text-center">
                     @Html.ActionLink("", "ReporteVentas", new { id = item.idventa, accion = "DetalleVenta" }, new { @class = "fa-regular fa-list-alt fa-beat", style = "color: #dfb9c6;" })
             </td>
-            
+            <td class="text-center">
+                @Html.ActionLink("", "ReporteVentas", new { id = item.idventa, accion = "EditarVenta" }, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
+            </td>
+            <td class="text-center">
+                    @if (item.estado == "Activo")
+                {
+                    @Html.ActionLink("", "ReporteVentas", new { id = item.idventa, accion = "EliminarVenta" }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
+                }
+                else
+                {
+                    @Html.ActionLink("", "ReporteVentas", new { id = item.idventa, accion = "RestaurarVenta" }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
+                }
+            </td>
         </tr>
         }
     </tbody>
 </table>
+
+<div class="d-flex align-items-center justify-content-end mt-5">
+    <label class="ms-3 " style=" font-size: 1.2rem;"><b>Total:</b></label>
+    <label class="ms-3 bgRosa px-3 py-2 rounded-pill" id="totalVentas" style=" font-size: 1.2rem;"></label>
+</div>
+
+
+
 
 @if (ViewBag.abrirModal == "DetalleVenta")
 {
@@ -311,9 +638,108 @@
             setTimeout(function () {
                 $('#MostrarDetalle').modal('show');
             }, 500);
-            $('#btn-close-editar').on('click', function () {
-                window.location.href = '/Ventas/Index';
+            $('#btn-close-detalle').on('click', function () {
+                window.location.href = '/Ventas/ReporteVentas';
             });
         });
     </script>
 }
+else if (ViewBag.abrirModal == "EditarVenta")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EditarVenta').modal('show');
+            }, 500);
+            $('#btn-close-detalle').on('click', function () {
+                window.location.href = '/Ventas/ReporteVentas';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "EliminarVenta")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#EliminarVenta').modal('show');
+            }, 500);
+            $('#btn-close-detalle').on('click', function () {
+                window.location.href = '/Ventas/ReporteVentas';
+            });
+        });
+    </script>
+}
+else if (ViewBag.abrirModal == "RestaurarVenta")
+{
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#@ViewBag.abrirModal').modal('show');
+            }, 500);
+            $('#btn-close-detalle').on('click', function () {
+                window.location.href = '/Ventas/ReporteVentas';
+            });
+        });
+    </script>
+}
+
+
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+           
+           window.location.href = '/Login/Login';
+            
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+
+
+        var fechaInput = $('#fechaFiltro').val();
+
+        var fechaHoy = new Date().toISOString().split('T')[0];
+        $('#fechaFiltro').val(fechaHoy);
+
+        function filtrarPorFecha() {
+            var fechaInput = $('#fechaFiltro').val();
+            var partesFecha = fechaInput.split('-');
+            var fechaFormateada = partesFecha[2] + '/' + partesFecha[1] + '/' + partesFecha[0];
+
+            var totalVentas = 0;
+
+            $('#tablaVentas tbody tr').each(function () {
+                var fecha = $(this).find('td:eq(3)').text().trim();
+                var fechaa = fecha.substring(0, 10);
+
+                if (fechaFormateada !== fechaa) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+
+                    // Verificar si el estado de la venta es "Activo"
+                    var estado = $(this).find('td:eq(6)').text().trim();
+                    if (estado === "Activo") {
+                        // Obtener el total de la venta de la columna correspondiente
+                        var totalVenta = parseFloat($(this).find('td:eq(4)').text().trim());
+                        // Sumar el total de la venta al total general
+                        totalVentas += totalVenta;
+                    }
+                }
+            });
+
+            // Mostrar el total de las ventas en el elemento con id "totalVentas"
+            $('#totalVentas').text(totalVentas.toFixed(2));
+        }
+
+        filtrarPorFecha();
+        $('#fechaFiltro').on('input', function () {
+            filtrarPorFecha();
+        });
+
+    });
+</script>
