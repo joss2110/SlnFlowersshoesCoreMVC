@@ -747,7 +747,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
                     TbVenta venta = db.TbVentas.Find(model.editventa.idventa)!;
 
-                    List<TbDetalleVenta> detallesVenta = db.TbDetalleVentas.Where(detalle => detalle.Idventa == 1).ToList();
+                    List<TbDetalleVenta> detallesVenta = db.TbDetalleVentas.Where(detalle => detalle.Idventa == venta.Idventa).ToList();
 
 
                     if (venta != null && detallesVenta !=null)
@@ -795,7 +795,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
                     TbVenta venta = db.TbVentas.Find(model.editventa.idventa)!;
 
-                    List<TbDetalleVenta> detallesVenta = db.TbDetalleVentas.Where(detalle => detalle.Idventa == 1).ToList();
+                    List<TbDetalleVenta> detallesVenta = db.TbDetalleVentas.Where(detalle => detalle.Idventa == venta.Idventa).ToList();
 
 
                     if (venta != null && detallesVenta != null)

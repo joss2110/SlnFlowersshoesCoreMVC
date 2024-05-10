@@ -18,6 +18,9 @@
 
 <hr />
 
+
+
+
 <form asp-action="AgregarCarrito" method="post">
     <div class="d-flex justify-content-between mb-4">
         @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
@@ -77,12 +80,13 @@
 
 
 
-<form asp-action="GenerarVenta" method="post">
-    <div class="d-flex align-items-center">
+<form asp-action="GenerarIngreso" method="post">
 
-        <textarea name="descripcioningre" class="form-control" style="width: 100%;">@ViewBag.Descripcion</textarea>
+    <div class="d-flex align-items-center mt-5">
+
+        <textarea name="descripcioningre" class="form-control" style="width: 100%;"></textarea>
 
     </div>
 
-    <button class="btn bgRosa mt-5" style="width: 100%;">GENERAR VENTA</button>
+    <button type="submit" class="btn bgRosa mt-5" style="width: 100%;">GENERAR VENTA</button>
 </form>

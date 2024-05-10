@@ -123,7 +123,7 @@ namespace FlowersshoesCoreMVC.Controllers
                 if (option == 1)
                 {
 
-                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Productos/EliminarProducto/{id}");
+                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Productos/DeleteProductos/{id}");
                     cadena = await respuesta.Content.ReadAsStringAsync();
                     
                 }
