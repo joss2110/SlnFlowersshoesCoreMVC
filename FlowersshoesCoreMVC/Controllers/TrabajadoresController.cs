@@ -17,6 +17,36 @@ namespace FlowersshoesCoreMVC.Controllers
             db = ctx;
         }
 
+        TbTrabajadore? RecuperarTrabajador()
+        {
+            var trabajadorJson = HttpContext.Session.GetString("trabajadorActual");
+
+            if (!string.IsNullOrEmpty(trabajadorJson))
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<TbTrabajadore>(trabajadorJson);
+                }
+                catch
+                {
+                    HttpContext.Session.Remove("trabajadorActual");
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        TbTrabajadore trabajadorActual = new TbTrabajadore();
+
+        void GrabarTrabajador()
+        {
+            HttpContext.Session.SetString("trabajadorActual",
+                    JsonConvert.SerializeObject(trabajadorActual));
+        }
+
         List<PA_LISTAR_TRABAJADORES> listatra = new List<PA_LISTAR_TRABAJADORES>();
 
         public async Task<List<PA_LISTAR_TRABAJADORES>> GetTrabajadores()
@@ -87,6 +117,12 @@ namespace FlowersshoesCoreMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Trabajadores(int id, string accion)
         {
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
             listatra = await GetTrabajadores();
             TrabajadoresVista viewmodel;
             ViewBag.abrirModal = "No";

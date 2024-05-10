@@ -18,7 +18,35 @@ namespace FlowersshoesCoreMVC.Controllers
             dao = _dao;
         }
 
+        TbTrabajadore? RecuperarTrabajador()
+        {
+            var trabajadorJson = HttpContext.Session.GetString("trabajadorActual");
 
+            if (!string.IsNullOrEmpty(trabajadorJson))
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<TbTrabajadore>(trabajadorJson);
+                }
+                catch
+                {
+                    HttpContext.Session.Remove("trabajadorActual");
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        TbTrabajadore trabajadorActual = new TbTrabajadore();
+
+        void GrabarTrabajador()
+        {
+            HttpContext.Session.SetString("trabajadorActual",
+                    JsonConvert.SerializeObject(trabajadorActual));
+        }
 
         public async Task<string> crearCliente(TbCliente obj)
         {
@@ -67,7 +95,6 @@ namespace FlowersshoesCoreMVC.Controllers
 
         List<PA_LISTAR_DETALLE_VENTAS> listacarrito = new List<PA_LISTAR_DETALLE_VENTAS>();
         TbCliente clienteActual = new TbCliente();
-        TbTrabajadore trabajadorActual = new TbTrabajadore();
 
         TbCliente? RecuperarCliente()
         {
@@ -126,9 +153,16 @@ namespace FlowersshoesCoreMVC.Controllers
         // GET: VentasController
         public ActionResult Index( int id, string accion)
         {
-            VentasVista viewmodel;
 
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
+            VentasVista viewmodel;
             clienteActual = RecuperarCliente()!;
+            trabajadorActual = RecuperarTrabajador()!;
 
             if (clienteActual != null)
             {
@@ -187,7 +221,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             clienteActual = RecuperarCliente()!;
             listacarrito = RecuperarCarrito();
-           trabajadorActual = db.TbTrabajadores.Find(1)!;
+           trabajadorActual = RecuperarTrabajador()!;
 
 
             if (clienteActual != null && listacarrito.Count > 0)

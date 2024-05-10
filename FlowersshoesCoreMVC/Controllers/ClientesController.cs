@@ -23,7 +23,35 @@ namespace FlowersshoesCoreMVC.Controllers
             }
         }
 
-       
+        TbTrabajadore? RecuperarTrabajador()
+        {
+            var trabajadorJson = HttpContext.Session.GetString("trabajadorActual");
+
+            if (!string.IsNullOrEmpty(trabajadorJson))
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<TbTrabajadore>(trabajadorJson);
+                }
+                catch
+                {
+                    HttpContext.Session.Remove("trabajadorActual");
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        TbTrabajadore trabajadorActual = new TbTrabajadore();
+
+        void GrabarTrabajador()
+        {
+            HttpContext.Session.SetString("trabajadorActual",
+                    JsonConvert.SerializeObject(trabajadorActual));
+        }
 
 
         public async Task<string> crearCliente( TbCliente obj)
@@ -98,6 +126,12 @@ namespace FlowersshoesCoreMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Clientes(int id, string accion)
         {
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
             lista = await GetClientes();
             ClientesVista viewmodel;
             ViewBag.abrirModal = "No";
