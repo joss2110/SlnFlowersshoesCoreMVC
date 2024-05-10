@@ -37,9 +37,13 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Imagen" class="control-label">Imagen</label>
-                                <input asp-for="NuevoProductos.Imagen" class="form-control" />
+                                <input type="file" id="imagenInput" name="imagenInput" accept="image/jpg" class="form-control-file" />
                                 <span asp-validation-for="NuevoProductos.Imagen" class="text-danger"></span>
                             </div>
+
+                            <!-- Vista previa de la imagen -->
+                            <div id="vistaPreviaImagen"></div>
+
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Nompro" class="control-label">Nombre De Producto</label>
                                 <input asp-for="NuevoProductos.Nompro" class="form-control" />
@@ -52,22 +56,34 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idtalla" class="control-label">Talla</label>
-                                <input asp-for="NuevoProductos.Idtalla" class="form-control" />
+                                <select asp-for="NuevoProductos.Idtalla" asp-items="@ViewBag.tallas" class="form-control">
+                                    <option value="">Seleccionar Talla</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Idtalla" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idcolor" class="control-label">Color</label>
-                                <input asp-for="NuevoProductos.Idcolor" class="form-control" />
+                                <select asp-for="NuevoProductos.Idcolor" asp-items="@ViewBag.color" class="form-control">
+                                    <option value="">Seleccionar Color</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Idcolor" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Categoria" class="control-label">Categoria</label>
-                                <input asp-for="NuevoProductos.Categoria" class="form-control" />
+                                <select asp-for="NuevoProductos.Categoria"  class="form-control">
+                                    <option value="">Seleccionar Categoria</option>
+                                    <option value="Sandalia">Sandalia</option>
+                                    <option value="Balerina">Balerina</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Categoria" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Temporada" class="control-label">Temporada</label>
-                                <input asp-for="NuevoProductos.Temporada" class="form-control" />
+                                <select asp-for="NuevoProductos.Temporada" class="form-control">
+                                    <option value="">Seleccionar Temporada</option>
+                                    <option value="Otoño-Invierno">Otoño-Invierno</option>
+                                    <option value="Primavera-Verano">Primavera-Verano</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Temporada" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -112,9 +128,13 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Imagen" class="control-label">Imagen</label>
-                                <input asp-for="NuevoProductos.Imagen" class="form-control" />
+                                <input type="file" id="imagenInput" name="imagenInput" accept="image/jpg" class="form-control-file" />
                                 <span asp-validation-for="NuevoProductos.Imagen" class="text-danger"></span>
                             </div>
+
+                            <!-- Vista previa de la imagen -->
+                            <div id="vistaPreviaImagen"></div>
+
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Nompro" class="control-label">Nombre De Producto</label>
                                 <input asp-for="NuevoProductos.Nompro" class="form-control" />
@@ -127,22 +147,34 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idtalla" class="control-label">Talla</label>
-                                <input asp-for="NuevoProductos.Idtalla" class="form-control" />
+                                <select asp-for="NuevoProductos.Idtalla" asp-items="@ViewBag.tallas" class="form-control">
+                                    <option value="">Seleccionar Talla</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Idtalla" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idcolor" class="control-label">Color</label>
-                                <input asp-for="NuevoProductos.Idcolor" class="form-control" />
+                                <select asp-for="NuevoProductos.Idcolor" asp-items="@ViewBag.color" class="form-control">
+                                    <option value="">Seleccionar Color</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Idcolor" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Categoria" class="control-label">Categoria</label>
-                                <input asp-for="NuevoProductos.Categoria" class="form-control" />
+                                <select asp-for="NuevoProductos.Categoria" class="form-control">
+                                    <option value="">Seleccionar Categoria</option>
+                                    <option value="Sandalia">Sandalia</option>
+                                    <option value="Balerina">Balerina</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Categoria" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Temporada" class="control-label">Temporada</label>
-                                <input asp-for="NuevoProductos.Temporada" class="form-control" />
+                                <select asp-for="NuevoProductos.Temporada" class="form-control">
+                                    <option value="">Seleccionar Temporada</option>
+                                    <option value="Otoño-Invierno">Otoño-Invierno</option>
+                                    <option value="Primavera-Verano">Primavera-Verano</option>
+                                </select>
                                 <span asp-validation-for="NuevoProductos.Temporada" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -165,7 +197,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar Producto</h5>
                 <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -176,52 +208,52 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idpro" class="control-label">Codido Barras</label>
-                                <input asp-for="NuevoProductos.Idpro" class="form-control" />
+                                <input asp-for="NuevoProductos.Idpro" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Idpro" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Codbar" class="control-label">Codido Barras</label>
-                                <input asp-for="NuevoProductos.Codbar" class="form-control" />
+                                <input asp-for="NuevoProductos.Codbar" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Codbar" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Imagen" class="control-label">Imagen</label>
-                                <input asp-for="NuevoProductos.Imagen" class="form-control" />
+                                <input asp-for="NuevoProductos.Imagen" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Imagen" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Nompro" class="control-label">Nombre De Producto</label>
-                                <input asp-for="NuevoProductos.Nompro" class="form-control" />
+                                <input asp-for="NuevoProductos.Nompro" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Nompro" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Precio" class="control-label">Precio</label>
-                                <input asp-for="NuevoProductos.Precio" class="form-control" />
+                                <input asp-for="NuevoProductos.Precio" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Precio" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idtalla" class="control-label">Talla</label>
-                                <input asp-for="NuevoProductos.Idtalla" class="form-control" />
+                                <input asp-for="NuevoProductos.Idtalla" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Idtalla" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idcolor" class="control-label">Color</label>
-                                <input asp-for="NuevoProductos.Idcolor" class="form-control" />
+                                <input asp-for="NuevoProductos.Idcolor" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Idcolor" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Categoria" class="control-label">Categoria</label>
-                                <input asp-for="NuevoProductos.Categoria" class="form-control" />
+                                <input asp-for="NuevoProductos.Categoria" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Categoria" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Temporada" class="control-label">Temporada</label>
-                                <input asp-for="NuevoProductos.Temporada" class="form-control" />
+                                <input asp-for="NuevoProductos.Temporada" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Temporada" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Descripcion" class="control-label">Descripcion</label>
-                                <input asp-for="NuevoProductos.Descripcion" class="form-control" />
+                                <input asp-for="NuevoProductos.Descripcion" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Descripcion" class="text-danger"></span>
                             </div>
 
@@ -239,7 +271,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Restaurar Producto</h5>
                 <button id="btn-close-eliminar" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -250,52 +282,52 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idpro" class="control-label">Codido Barras</label>
-                                <input asp-for="NuevoProductos.Idpro" class="form-control" />
+                                <input asp-for="NuevoProductos.Idpro" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Idpro" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Codbar" class="control-label">Codido Barras</label>
-                                <input asp-for="NuevoProductos.Codbar" class="form-control" />
+                                <input asp-for="NuevoProductos.Codbar" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Codbar" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Imagen" class="control-label">Imagen</label>
-                                <input asp-for="NuevoProductos.Imagen" class="form-control" />
+                                <input asp-for="NuevoProductos.Imagen" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Imagen" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Nompro" class="control-label">Nombre De Producto</label>
-                                <input asp-for="NuevoProductos.Nompro" class="form-control" />
+                                <input asp-for="NuevoProductos.Nompro" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Nompro" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Precio" class="control-label">Precio</label>
-                                <input asp-for="NuevoProductos.Precio" class="form-control" />
+                                <input asp-for="NuevoProductos.Precio" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Precio" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idtalla" class="control-label">Talla</label>
-                                <input asp-for="NuevoProductos.Idtalla" class="form-control" />
+                                <input asp-for="NuevoProductos.Idtalla" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Idtalla" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Idcolor" class="control-label">Color</label>
-                                <input asp-for="NuevoProductos.Idcolor" class="form-control" />
+                                <input asp-for="NuevoProductos.Idcolor" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Idcolor" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Categoria" class="control-label">Categoria</label>
-                                <input asp-for="NuevoProductos.Categoria" class="form-control" />
+                                <input asp-for="NuevoProductos.Categoria" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Categoria" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Temporada" class="control-label">Temporada</label>
-                                <input asp-for="NuevoProductos.Temporada" class="form-control" />
+                                <input asp-for="NuevoProductos.Temporada" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Temporada" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoProductos.Descripcion" class="control-label">Descripcion</label>
-                                <input asp-for="NuevoProductos.Descripcion" class="form-control" />
+                                <input asp-for="NuevoProductos.Descripcion" class="form-control" readonly />
                                 <span asp-validation-for="NuevoProductos.Descripcion" class="text-danger"></span>
                             </div>
 
@@ -419,10 +451,10 @@
     <script>
         $(document).ready(function () {
             setTimeout(function () {
-                $('#EditarCliente').modal('show');
+                $('#EditarProducto').modal('show');
             }, 500);
             $('#btn-close-editar').on('click', function () {
-                window.location.href = '/Clientes/Clientes';
+                window.location.href = '/Productos/Productos';
             });
         });
     </script>
@@ -432,10 +464,10 @@ else if (ViewBag.abrirModal == "Eliminar")
     <script>
         $(document).ready(function () {
             setTimeout(function () {
-                $('#EliminarCliente').modal('show');
+                $('#EliminarProducto').modal('show');
             }, 500);
             $('#btn-close-eliminar').on('click', function () {
-                window.location.href = '/Clientes/Clientes';
+                window.location.href = '/Productos/Productos';
             });
         });
     </script>
@@ -445,10 +477,10 @@ else if (ViewBag.abrirModal == "Restaurar")
     <script>
         $(document).ready(function () {
             setTimeout(function () {
-                $('#RestaurarCliente').modal('show');
+                $('#RestaurarProducto').modal('show');
             }, 500);
             $('#btn-close-restaurar').on('click', function () {
-                window.location.href = '/Clientes/Clientes';
+                window.location.href = '/Productos/Productos';
             });
         });
     </script>
@@ -491,5 +523,18 @@ else if (ViewBag.abrirModal == "Restaurar")
                 $(this).toggle(cumpleFiltro && (!esInactivo || $('#toggleInactive').hasClass('activo')));
             });
         }
+    });
+</script>
+<script>
+    document.getElementById('imagenInput').addEventListener('change', function (event) {
+        var archivo = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var vistaPrevia = document.getElementById('vistaPreviaImagen');
+            vistaPrevia.innerHTML = '<img src="' + e.target.result + '" class="img-thumbnail" />';
+        }
+
+        reader.readAsDataURL(archivo);
     });
 </script>

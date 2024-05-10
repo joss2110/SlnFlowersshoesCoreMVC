@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using PrjFlowersshoesAPI.Models;
 using System.Text;
 
 namespace FlowersshoesCoreMVC.Controllers
@@ -136,8 +135,8 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
 
-        // Distritos
-        //List<Distritos> listadistritos = new List<Distritos>();
+
+
         public async Task<List<TbTalla>> traerTallas()
         {
             // permite realizar una solicitud al servicio web api
@@ -149,13 +148,12 @@ namespace FlowersshoesCoreMVC.Controllers
                         "http://localhost:5050/api/Tallas/GetTallas");
                 // convertimos el contenido de la variable respuesta a una cadena
                 string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                // para despues deserializarlo al formato Json de un List<Distritos>
+
                 return JsonConvert.DeserializeObject<List<TbTalla>>(respuestaAPI)!;
             }
         }
 
-        // Especialidad
-        //List<Especialidad> listaespecialidad = new List<Especialidad>();
+
         public async Task<List<TbColores>> traerColores()
         {
             // permite realizar una solicitud al servicio web api
@@ -167,7 +165,7 @@ namespace FlowersshoesCoreMVC.Controllers
                         "http://localhost:5050/api/Colores/GetColores");
                 // convertimos el contenido de la variable respuesta a una cadena
                 string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                // para despues deserializarlo al formato Json de un List<Distritos>
+
                 return JsonConvert.DeserializeObject<List<TbColores>>(respuestaAPI)!;
             }
         }
@@ -233,7 +231,11 @@ namespace FlowersshoesCoreMVC.Controllers
                 ViewBag.abrirModal = accion;
             }
 
-
+            ViewBag.tallas =
+               new SelectList(await traerTallas(), "Idtalla", "Talla");
+            //
+            ViewBag.color =
+                new SelectList(await traerColores(), "Idcolor", "Color");
 
             return View(viewmodel);
         }
@@ -246,18 +248,14 @@ namespace FlowersshoesCoreMVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid == true)
-                {
+                
                     TbProducto nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await CrearProducto(nuevoProducto);
 
                     return RedirectToAction(nameof(Productos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo Agregar un nuevo Registro, intentalo nuevamente";
-                }
+
+
             }
             catch (Exception ex)
             {
@@ -286,18 +284,13 @@ namespace FlowersshoesCoreMVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid == true)
-                {
+               
                     TbProducto nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await EditarProducto(nuevoProducto);
 
                     return RedirectToAction(nameof(Productos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
-                }
+                
             }
             catch (Exception ex)
             {
@@ -326,18 +319,13 @@ namespace FlowersshoesCoreMVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid == true)
-                {
+             
                     TbProducto nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.Idpro, 1);
 
                     return RedirectToAction(nameof(Productos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
-                }
+
             }
             catch (Exception ex)
             {
@@ -360,18 +348,13 @@ namespace FlowersshoesCoreMVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid == true)
-                {
+
                     TbProducto nuevoProducto = model.NuevoProductos;
 
                     TempData["mensaje"] = await EliminarRestaurarProducto(model.NuevoProductos.Idpro, 2);
 
                     return RedirectToAction(nameof(Productos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo editar el registro, intentalo nuevamente";
-                }
+
             }
             catch (Exception ex)
             {
