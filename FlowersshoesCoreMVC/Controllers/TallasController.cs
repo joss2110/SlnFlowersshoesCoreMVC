@@ -55,6 +55,8 @@ namespace FlowersshoesCoreMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Tallas(int id, string accion)
         {
+            trabajadorActual = RecuperarTrabajador()!;
+
             if (trabajadorActual != null)
             {
                 ViewBag.trabajador = trabajadorActual;

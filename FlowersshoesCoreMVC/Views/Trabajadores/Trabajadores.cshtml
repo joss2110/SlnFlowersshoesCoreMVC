@@ -72,7 +72,9 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoTrabajador.Idrol" class="control-label">IdRol</label>
-                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" />
+                                <select asp-for="NuevoTrabajador.Idrol" asp-items="@ViewBag.roles" class="form-control">
+                                    <option value="">Seleccionar rol</option>
+                                </select>
                                 <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
                             </div>
                             <div class="form-group pt-3">
@@ -143,7 +145,9 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoTrabajador.Idrol" class="control-label">IdRol</label>
-                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" />
+                                <select asp-for="NuevoTrabajador.Idrol" asp-items="@ViewBag.roles" class="form-control">
+                                    <option value="">Seleccionar rol</option>
+                                </select>
                                 <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
                             </div>
                             <div class="form-group pt-3">
@@ -206,7 +210,9 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoTrabajador.Idrol" class="control-label">Rol</label>
-                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" readonly />
+                                <select asp-for="NuevoTrabajador.Idrol" asp-items="@ViewBag.roles" class="form-control" disabled>
+                                    <option value="">Seleccionar rol</option>
+                                </select>
                                 <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -275,7 +281,9 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="NuevoTrabajador.Idrol" class="control-label">Rol</label>
-                                <input asp-for="NuevoTrabajador.Idrol" class="form-control" readonly />
+                                <select asp-for="NuevoTrabajador.Idrol" asp-items="@ViewBag.roles" class="form-control" disabled>
+                                    <option value="">Seleccionar rol</option>
+                                </select>
                                 <span asp-validation-for="NuevoTrabajador.Idrol" class="text-danger"></span>
                             </div>
                             <div class="form-group">

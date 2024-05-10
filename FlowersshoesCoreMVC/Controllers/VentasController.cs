@@ -153,6 +153,7 @@ namespace FlowersshoesCoreMVC.Controllers
         // GET: VentasController
         public ActionResult Index( int id, string accion)
         {
+             trabajadorActual = RecuperarTrabajador()!; 
 
             if (trabajadorActual != null)
             {

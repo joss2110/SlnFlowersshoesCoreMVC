@@ -203,6 +203,8 @@ namespace FlowersshoesCoreMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Productos(int id, string accion)
         {
+            trabajadorActual = RecuperarTrabajador()!;
+
             if (trabajadorActual != null)
             {
                 ViewBag.trabajador = trabajadorActual;

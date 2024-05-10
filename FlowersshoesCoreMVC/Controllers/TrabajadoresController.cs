@@ -1,6 +1,7 @@
 ﻿using FlowersshoesCoreMVC.Models;
 using FlowersshoesCoreMVC.Models.Vistas;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Newtonsoft.Json;
 using PrjFlowersshoesAPI.Models;
@@ -56,6 +57,16 @@ namespace FlowersshoesCoreMVC.Controllers
                 var respuesta = await httpcliente.GetAsync("http://localhost:5050/api/Trabajadores/GetTrabajadores");
                 string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<List<PA_LISTAR_TRABAJADORES>>(respuestaAPI)!;
+            }
+        }
+
+        public async Task<List<TbRole>> GetRoles()
+        {
+            using (var httpcliente = new HttpClient())
+            {
+                var respuesta = await httpcliente.GetAsync("http://localhost:5050/api/Roles/GetRoles");
+                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<TbRole>>(respuestaAPI)!;
             }
         }
 
@@ -117,6 +128,8 @@ namespace FlowersshoesCoreMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Trabajadores(int id, string accion)
         {
+            trabajadorActual = RecuperarTrabajador()!;
+
             if (trabajadorActual != null)
             {
                 ViewBag.trabajador = trabajadorActual;
@@ -143,6 +156,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 };
                 ViewBag.abrirModal = accion;
             }
+            ViewBag.roles =
+                new SelectList(await GetRoles(), "Idrol", "NomRol");
             //
             return View(viewmodel);
         }
@@ -177,6 +192,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 listaTrabajadores = listatra
             };
 
+            ViewBag.roles =
+                new SelectList(await GetRoles(), "Idrol", "NomRol");
             return View("Trabajadores", viewmodel);
         }
 
@@ -209,6 +226,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 listaTrabajadores = listatra
             };
             //
+            ViewBag.roles =
+                new SelectList(await GetRoles(), "Idrol", "NomRol");
             return View("Trabajadores", viewmodel);
         }
 
@@ -242,6 +261,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 listaTrabajadores = listatra
             };
             //
+            ViewBag.roles =
+                new SelectList(await GetRoles(), "Idrol", "NomRol");
             return View("Trabajadores", viewmodel);
         }
 
@@ -274,6 +295,8 @@ namespace FlowersshoesCoreMVC.Controllers
                 listaTrabajadores = listatra
             };
             //
+            ViewBag.roles =
+                new SelectList(await GetRoles(), "Idrol", "NomRol");
             return View("Trabajadores", viewmodel);
         }
 

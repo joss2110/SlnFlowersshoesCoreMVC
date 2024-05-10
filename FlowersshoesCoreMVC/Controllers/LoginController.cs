@@ -18,16 +18,9 @@ namespace FlowersshoesCoreMVC.Controllers
 
         public IActionResult Login()
         {
-            HttpContext.Session.Remove("trabajadorActual");
-            //
-            RecuperarTrabajador();
-            //
-            if (trabajadorActual != null)
-            {
-                ViewBag.trabajadores = trabajadorActual;
-                ViewBag.rolTrabajador = trabajadorActual.Idrol;
-            }
-            //
+            trabajadorActual = null;
+            GrabarTrabajador();
+
             return View();
         }
 
