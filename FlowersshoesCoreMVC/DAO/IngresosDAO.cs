@@ -47,7 +47,7 @@ namespace FlowersshoesCoreMVC.DAO
 
             try
             {
-                SqlHelper.ExecuteNonQuery(cad_cn, "PA_EDITAR_VENTA", idingre, descripcion);
+                SqlHelper.ExecuteNonQuery(cad_cn, "PA_EDITAR_INGRESOS", idingre, descripcion);
      
                 resultado = "El ingreso se edito con exito!!";
 
@@ -119,6 +119,7 @@ namespace FlowersshoesCoreMVC.DAO
                 foreach(var item in detaIngre)
                 {
                     SqlHelper.ExecuteNonQuery(cad_cn, "PA_ELIMINAR_DETALLE_INGRESO", item.Idpro, item.Cantidad);
+                    mensaje = "El ingreso ha sido Eliminado con Exito";
                 }
 
                 mensaje = "El ingreso ha sido Eliminado con Exito";

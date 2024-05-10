@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Text;
 using System.Net.Http;
 using FlowersshoesCoreMVC.DAO;
+using System.Collections.Generic;
+using System;
 
 
 namespace FlowersshoesCoreMVC.Controllers
@@ -132,7 +134,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
             listacarrito = RecuperarCarrito();
-            
+
 
             var viewmodel = new IngresosVista
             {
@@ -163,24 +165,24 @@ namespace FlowersshoesCoreMVC.Controllers
                     var encontrado = listacarrito.Find(c => c.idpro == producto.Idpro);
                     if (encontrado == null)
                     {
-                        
-                            PA_LISTAR_DETALLE_INGRESOS ldv = new PA_LISTAR_DETALLE_INGRESOS()
-                            {
-                                imagen = producto.Imagen!,
-                                idpro = producto.Idpro,
-                                nompro = producto.Nompro,
-                                color = db.TbColores.Find(producto.Idcolor)!.Color,
-                                talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
-                                cantidad = 1,
-                            };
-                            listacarrito.Add(ldv);
-                        
+
+                        PA_LISTAR_DETALLE_INGRESOS ldv = new PA_LISTAR_DETALLE_INGRESOS()
+                        {
+                            imagen = producto.Imagen!,
+                            idpro = producto.Idpro,
+                            nompro = producto.Nompro,
+                            color = db.TbColores.Find(producto.Idcolor)!.Color,
+                            talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
+                            cantidad = 1,
+                        };
+                        listacarrito.Add(ldv);
+
 
 
                     }
                     else
                     {
-                       
+
                         encontrado.cantidad += 1;
 
                     }
@@ -203,7 +205,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
             listacarrito = RecuperarCarrito();
 
-           
+
             var viewmodel = new IngresosVista
             {
                 listaDetaingresos = listacarrito
@@ -220,10 +222,194 @@ namespace FlowersshoesCoreMVC.Controllers
             return View("NuevoIngreso", viewmodel);
         }
 
-        public ActionResult ReporteIngresos()
+        public ActionResult ReporteIngresos(int idingre, string accion)
         {
+            trabajadorActual = RecuperarTrabajador()!;
 
-            return View();
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
+            List<PA_LISTAR_INGRESOS> listai = dao.listarIngresos();
+
+            List<PA_LISTAR_DETALLE_INGRESOS> listaid = dao.listarDetaIngres(idingre);
+
+            ReporteIngresosVista viewmodel;
+
+            if (idingre == 0)
+            {
+                viewmodel = new ReporteIngresosVista
+                {
+
+                    editingreso = new PA_LISTAR_INGRESOS(),
+                    listaIngreso = listai,
+                    listaDetaIngreso = new List<PA_LISTAR_DETALLE_INGRESOS>()
+                };
+            }
+            else
+            {
+                viewmodel = new ReporteIngresosVista
+                {
+                    editingreso = listai.Find(v => v.idingre == idingre)!,
+                    listaIngreso = listai,
+                    listaDetaIngreso = listaid
+                };
+                ViewBag.abrirModal = accion;
+            }
+
+            return View(viewmodel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditarIngreso(ReporteIngresosVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+
+
+                    TbIngreso ingreso = db.TbIngresos.Find(model.editingreso.idingre)!;
+
+                    if (ingreso != null)
+                    {
+                        ingreso.Descripcion = model.editingreso.descripcion;
+                        TempData["mensaje"] = dao.EditarIngreso(ingreso.Idingre, ingreso.Descripcion);
+
+                    }
+
+                    return RedirectToAction(nameof(ReporteIngresos));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo editar el ingreso, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            ReporteIngresosVista viewmodel;
+
+            List<PA_LISTAR_INGRESOS> listai = dao.listarIngresos();
+
+            viewmodel = new ReporteIngresosVista
+            {
+
+                editingreso = new PA_LISTAR_INGRESOS(),
+                listaIngreso = listai,
+                listaDetaIngreso = new List<PA_LISTAR_DETALLE_INGRESOS>()
+            };
+
+            return View("ReporteIngresos", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarIngreso(ReporteIngresosVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+
+
+                    TbIngreso ingreso = db.TbIngresos.Find(model.editingreso.idingre)!;
+
+                    List<TbDetalleIngreso> detallesIngreso = db.TbDetalleIngresos.Where(detalle => detalle.Idingre == ingreso.Idingre).ToList();
+
+
+                    if (ingreso != null && detallesIngreso != null)
+                    {
+                        ingreso.Descripcion = model.editingreso.descripcion;
+                        TempData["mensaje"] = dao.EliminarIngre(ingreso.Idingre, detallesIngreso);
+
+                    }
+
+                    return RedirectToAction(nameof(ReporteIngresos));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo eliminar el ingreso, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            ReporteIngresosVista viewmodel;
+
+            List<PA_LISTAR_INGRESOS> listai = dao.listarIngresos();
+
+            viewmodel = new ReporteIngresosVista
+            {
+
+                editingreso = new PA_LISTAR_INGRESOS(),
+                listaIngreso = listai,
+                listaDetaIngreso = new List<PA_LISTAR_DETALLE_INGRESOS>()
+            };
+
+            return View("ReporteIngresos", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RestaurarIngreso(ReporteIngresosVista model)
+        {
+            try
+            {
+                if (ModelState.IsValid == true)
+                {
+                    TbIngreso ingreso = db.TbIngresos.Find(model.editingreso.idingre)!;
+
+                    List<TbDetalleIngreso> detallesIngreso = db.TbDetalleIngresos.Where(detalle => detalle.Idingre == ingreso.Idingre).ToList();
+
+                    if (ingreso != null && detallesIngreso != null)
+                    {
+                        ingreso.Descripcion = model.editingreso.descripcion;
+                        TempData["mensaje"] = dao.RestaurarIngre(ingreso.Idingre, detallesIngreso);
+
+                    }
+
+                    return RedirectToAction(nameof(ReporteIngresos));
+                }
+                else
+                {
+                    TempData["mensaje"] = "No se pudo restaurar el ingreso, intentalo nuevamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["mensaje"] = "Error: " + ex.Message;
+            }
+
+            ReporteIngresosVista viewmodel;
+
+            List<PA_LISTAR_INGRESOS> listai = dao.listarIngresos();
+
+            viewmodel = new ReporteIngresosVista
+            {
+
+                editingreso = new PA_LISTAR_INGRESOS(),
+                listaIngreso = listai,
+                listaDetaIngreso = new List<PA_LISTAR_DETALLE_INGRESOS>()
+            };
+
+            return View("ReporteIngresos", viewmodel);
+        }
+
+
+
+
+
+
+
+
+
+    }
 }
