@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using FlowersshoesCoreMVC.Models;
 using System.Text;
 
 namespace FlowersshoesCoreMVC.Controllers

@@ -295,21 +295,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.estado)
             </td>
-                <td class="text-center">
-                    @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Editar" }, new { @class = "fa-regular fa-pen-to-square fa-beat", style = "color: #dfb9c6;" })
-                </td>
-                <td class="text-center">
-                    @if (item.Estado == "Activo")
-                    {
-                        @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Eliminar" }, new { @class = "fa-solid fa-trash-can fa-beat", style = "color: #dfb9c6;" })
-                    }
-                    else
-                    {
-                        @Html.ActionLink("", "Colores", new { id = item.Idcolor, accion = "Restaurar" }, new { @class = "fa-solid fa-rotate-right fa-beat", style = "color: #dfb9c6;" })
-                    }
-                </td>
+            <td class="text-center">
+                    @Html.ActionLink("", "ReporteVentas", new { id = item.idventa, accion = "DetalleVenta" }, new { @class = "fa-regular fa-list-alt fa-beat", style = "color: #dfb9c6;" })
+            </td>
+            
         </tr>
-}
+        }
     </tbody>
 </table>
 
@@ -318,36 +309,10 @@
     <script>
         $(document).ready(function () {
             setTimeout(function () {
-                $('#EditarCli').modal('show');
+                $('#MostrarDetalle').modal('show');
             }, 500);
             $('#btn-close-editar').on('click', function () {
                 window.location.href = '/Ventas/Index';
-            });
-        });
-    </script>
-}
-else if (ViewBag.abrirModal == "Eliminar")
-{
-    <script>
-        $(document).ready(function () {
-            setTimeout(function () {
-                $('#EliminarColor').modal('show');
-            }, 500);
-            $('#btn-close-eliminar').on('click', function () {
-                window.location.href = '/Colores/Colores';
-            });
-        });
-    </script>
-}
-else if (ViewBag.abrirModal == "Restaurar")
-{
-    <script>
-        $(document).ready(function () {
-            setTimeout(function () {
-                $('#RestaurarColor').modal('show');
-            }, 500);
-            $('#btn-close-restaurar').on('click', function () {
-                window.location.href = '/Colores/Colores';
             });
         });
     </script>
