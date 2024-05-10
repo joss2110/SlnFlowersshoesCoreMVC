@@ -6,316 +6,178 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Drawing;
 using System.Text;
 using System.Net.Http;
+using FlowersshoesCoreMVC.DAO;
+
 
 namespace FlowersshoesCoreMVC.Controllers
-{
-    public class IngresosController : Controller
     {
-        List<TbIngreso> lista = new List<TbIngreso>();
-        List<TbTrabajadore> listaTrabajadores = new List<TbTrabajadore>();
-        List<TbProducto> listaProductos = new List<TbProducto>();
-
-        #region Listas
-
-        public async Task<List<TbIngreso>> GetIngresos()
+        public class IngresosController : Controller
         {
-            using (var httpcliente = new HttpClient())
+            private readonly flowersshoesContext db;
+            private readonly IngresosDAO dao;
+
+            public IngresosController(flowersshoesContext ctx, IngresosDAO _dao)
             {
-                var respuesta = await httpcliente.GetAsync("http://localhost:5050/api/Ingresos/GetIngresos");
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<TbIngreso>>(respuestaAPI)!;
+                db = ctx;
+                dao = _dao;
             }
-        }
 
-        public async Task<List<TbDetalleIngreso>> GetDetalleIngresos(int idingre)
-        {
-            using (var httpcliente = new HttpClient())
+            TbTrabajadore? RecuperarTrabajador()
             {
-                var respuesta = await httpcliente.GetAsync($"http://localhost:5050/api/DetalleIngresos/GetDetalleIngresos/{idingre}");
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<TbDetalleIngreso>>(respuestaAPI)!;
-            }
-        }
+                var trabajadorJson = HttpContext.Session.GetString("trabajadorActual");
 
-        public async Task<List<TbTrabajadore>> GetTrabajadores()
-        {
-            using (var httpcliente = new HttpClient())
-            {
-                var respuesta = await httpcliente.GetAsync("http://localhost:5050/api/Trabajadores/GetTrabajadores");
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<TbTrabajadore>>(respuestaAPI)!;
-            }
-        }
-
-        public async Task<List<TbProducto>> GetProductos()
-        {
-            using (var httpcliente = new HttpClient())
-            {
-                var respuesta = await httpcliente.GetAsync("http://localhost:5050/api/Productos/GetProductos");
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<TbProducto>>(respuestaAPI)!;
-            }
-        }
-
-        #endregion
-
-        public async Task<string> CrearIngreso(TbIngreso obj)
-        {
-            string cadena = string.Empty;
-            using (var httpcliente = new HttpClient())
-            {
-
-                StringContent contenido = new StringContent(
-                    JsonConvert.SerializeObject(obj), Encoding.UTF8,
-                    "application/json");
-
-                HttpResponseMessage respuesta = new HttpResponseMessage();
-
-                respuesta = await httpcliente.PostAsync("http://localhost:5050/api/Ingresos/GrabarIngresos", contenido);
-
-                TbDetalleIngreso objD = new TbDetalleIngreso();
-                objD.Idingre = Convert.ToInt32(await respuesta.Content.ReadAsStringAsync());
-                //objD.Idpro = obj.Idpro;
-                //objD.Cantidad = obj.Cantidad;
-
-                StringContent contenidoDetalle = new StringContent(
-                    JsonConvert.SerializeObject(objD), Encoding.UTF8,
-                    "application/json");
-
-                respuesta = await httpcliente.PostAsync("http://localhost:5050/api/DetalleIngresos/GrabarDetalleIngresos", contenidoDetalle);
-
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-                cadena = respuestaAPI;
-            }
-            return cadena;
-        }
-
-        TbTrabajadore? RecuperarTrabajador()
-        {
-            var trabajadorJson = HttpContext.Session.GetString("trabajadorActual");
-
-            if (!string.IsNullOrEmpty(trabajadorJson))
-            {
-                try
+                if (!string.IsNullOrEmpty(trabajadorJson))
                 {
-                    return JsonConvert.DeserializeObject<TbTrabajadore>(trabajadorJson);
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<TbTrabajadore>(trabajadorJson);
+                    }
+                    catch
+                    {
+                        HttpContext.Session.Remove("trabajadorActual");
+                        return null;
+                    }
                 }
-                catch
+                else
                 {
-                    HttpContext.Session.Remove("trabajadorActual");
                     return null;
                 }
             }
-            else
+
+            TbTrabajadore trabajadorActual = new TbTrabajadore();
+
+            List<PA_LISTAR_DETALLE_INGRESOS> listacarrito = new List<PA_LISTAR_DETALLE_INGRESOS>();
+            string descripcion = string.Empty;
+
+            List<PA_LISTAR_DETALLE_INGRESOS> RecuperarCarrito()
             {
-                return null;
-            }
-        }
+                var carritoJson = HttpContext.Session.GetString("CarritoIngre");
 
-        TbTrabajadore trabajadorActual = new TbTrabajadore();
-
-        void GrabarTrabajador()
-        {
-            HttpContext.Session.SetString("trabajadorActual",
-                    JsonConvert.SerializeObject(trabajadorActual));
-        }
-        public async Task<string> EliminarRestaurarIngreso(int id, int option)
-        {
-            string cadena = string.Empty;
-
-            using (var httpClient = new HttpClient())
-            {
-                var ingreso = (await GetIngresos()).Find(x => x.Idingre.Equals(id));
-                var detalle = (await GetDetalleIngresos(id)).Find(x => x.Idingre.Equals(id));
-                if (option == 1)
+                if (carritoJson != null)
                 {
-                    HttpResponseMessage respuesta = await httpClient.DeleteAsync($"http://localhost:5050/api/Ingresos/EliminarIngresos/{id}");
-
-                    StringContent contenido = new StringContent(
-                    JsonConvert.SerializeObject(detalle), Encoding.UTF8,
-                    "application/json");
-                    respuesta = await httpClient.PutAsync("http://localhost:5050/api/DetalleIngresos/EliminarDetalleIngresos", contenido);
-
-                    cadena = await respuesta.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<PA_LISTAR_DETALLE_INGRESOS>>(carritoJson)!;
                 }
                 else
                 {
-                    StringContent contenido = new StringContent(
-                    JsonConvert.SerializeObject(ingreso), Encoding.UTF8,
-                    "application/json");
-
-                    HttpResponseMessage respuesta = await httpClient.PutAsync($"http://localhost:5050/api/Ingresos/RestaurarIngresos", contenido);
-
-                    StringContent contenidoD = new StringContent(
-                    JsonConvert.SerializeObject(detalle), Encoding.UTF8,
-                    "application/json");
-                    respuesta = await httpClient.PutAsync("http://localhost:5050/api/DetalleIngresos/RestaurarDetalleIngresos", contenidoD);
-
-                    cadena = await respuesta.Content.ReadAsStringAsync();
+                    return new List<PA_LISTAR_DETALLE_INGRESOS>();
                 }
             }
 
-            return cadena;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Ingresos(int id, string accion)
-        {
-            trabajadorActual = RecuperarTrabajador()!;
-
-            if (trabajadorActual != null)
+            void GrabarCarrito()
             {
-                ViewBag.trabajador = trabajadorActual;
-                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                HttpContext.Session.SetString("CarritoIngre",
+                        JsonConvert.SerializeObject(listacarrito));
             }
 
-            lista = await GetIngresos();
-            listaTrabajadores = await GetTrabajadores();
-            listaProductos = await GetProductos();
-            IngresosVista viewmodel;
-            ViewBag.abrirModal = "No";
 
-            if (id == 0)
+
+        string RecuperarDescripcion()
+        {
+            var decripcionJson = HttpContext.Session.GetString("descripcioningre");
+
+            if (decripcionJson != null)
             {
-                viewmodel = new IngresosVista
-                {
-                    NuevoIngreso = new TbIngreso(),
-                    listaIngresos = lista,
-                   // listaTrabajadores = listaTrabajadores,
-                   // listaProductos = listaProductos
-                };
+                return JsonConvert.DeserializeObject<string>(decripcionJson)!;
             }
             else
             {
+                return "";
+            }
+        }
+
+        void GrabarDescripcion()
+        {
+            HttpContext.Session.SetString("descripcioningre",
+                    JsonConvert.SerializeObject(descripcion));
+        }
+
+
+        public ActionResult NuevoIngreso(int id, string accion)
+            {
+                trabajadorActual = RecuperarTrabajador()!;
+
+                if (trabajadorActual != null)
+                {
+                    ViewBag.trabajador = trabajadorActual;
+                    ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                }
+
+                IngresosVista viewmodel;
+
+                listacarrito = RecuperarCarrito();
+
                 viewmodel = new IngresosVista
                 {
-                    NuevoIngreso = lista.Find(c => c.Idingre == id)!,
-                    listaIngresos = lista,
-                    //listaTrabajadores = listaTrabajadores,
-                   // listaProductos = listaProductos
+                    listaDetaingresos = listacarrito
                 };
-                ViewBag.abrirModal = accion;
+
+                return View(viewmodel);
             }
 
-            return View(viewmodel);
+
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public IActionResult GenerarVenta(string descripcioningre)
+            {
+
+                listacarrito = RecuperarCarrito();
+                trabajadorActual = RecuperarTrabajador()!;
+                descripcion = RecuperarDescripcion();
+                
+                
+                List<TbDetalleIngreso> lista = new List<TbDetalleIngreso>();
+
+
+                foreach (PA_LISTAR_DETALLE_INGRESOS item in listacarrito)
+                {
+
+                    TbDetalleIngreso di = new TbDetalleIngreso()
+                    {
+                        Idpro = item.idpro,
+                        Cantidad = item.cantidad
+                    };
+                    lista.Add(di);
+                }
+
+                 descripcion = RecuperarDescripcion();
+
+                try
+                {
+                    TempData["mensaje"] = dao.GererarIngreso(trabajadorActual.Idtra, descripcion, lista);
+
+                    listacarrito.Clear();
+                    GrabarCarrito();
+                    descripcion = "";
+                    GrabarDescripcion();
+
+                }
+                catch (Exception ex)
+                {
+                    TempData["mensaje"] = ex.Message;
+                }
+
+
+                listacarrito = RecuperarCarrito();
+                ViewBag.Descripcion = descripcion;
+
+                var viewmodel = new IngresosVista
+                {
+                    listaDetaingresos = listacarrito
+                };
+                trabajadorActual = RecuperarTrabajador()!;
+
+                if (trabajadorActual != null)
+                {
+                    ViewBag.trabajador = trabajadorActual;
+                    ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                }
+
+                return View("Index", viewmodel);
+            }
+
+            
+
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Agregar(IngresosVista model)
-        {
-            try
-            {
-                if (ModelState.IsValid == true)
-                {
-                    TbIngreso nuevoIngreso = model.NuevoIngreso;
-
-                    TempData["mensaje"] = await CrearIngreso(nuevoIngreso);
-
-                    return RedirectToAction(nameof(Ingresos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo Agregar un nuevo Registro, intentalo nuevamente";
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["mensaje"] = "Error: " + ex.Message;
-            }
-
-            lista = await GetIngresos();
-            listaTrabajadores = await GetTrabajadores();
-            listaProductos = await GetProductos();
-
-            var viewmodel = new IngresosVista
-            {
-                NuevoIngreso = new TbIngreso(),
-                listaIngresos = lista,
-                //listaTrabajadores = listaTrabajadores,
-                //listaProductos = listaProductos
-            };
-
-            return View("Ingresos", viewmodel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Eliminar(IngresosVista model)
-        {
-            try
-            {
-                if (ModelState.IsValid == true)
-                {
-                    TbIngreso nuevoColor = model.NuevoIngreso;
-
-                    TempData["mensaje"] = await EliminarRestaurarIngreso(model.NuevoIngreso.Idingre, 1);
-
-                    return RedirectToAction(nameof(Ingresos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo Eliminar el Registro, intentalo nuevamente";
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["mensaje"] = "Error: " + ex.Message;
-            }
-
-            lista = await GetIngresos();
-            listaTrabajadores = await GetTrabajadores();
-            listaProductos = await GetProductos();
-
-            var viewmodel = new IngresosVista
-            {
-                NuevoIngreso = new TbIngreso(),
-                listaIngresos = lista,
-               // listaTrabajadores = listaTrabajadores,
-               // listaProductos = listaProductos
-            };
-
-            return View("Ingresos", viewmodel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Restaurar(IngresosVista model)
-        {
-            try
-            {
-                if (ModelState.IsValid == true)
-                {
-                    TbIngreso nuevoColor = model.NuevoIngreso;
-
-                    TempData["mensaje"] = await EliminarRestaurarIngreso(model.NuevoIngreso.Idingre, 2);
-
-                    return RedirectToAction(nameof(Ingresos));
-                }
-                else
-                {
-                    TempData["mensaje"] = "No se pudo Restaurar el Registro, intentalo nuevamente";
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["mensaje"] = "Error: " + ex.Message;
-            }
-
-            lista = await GetIngresos();
-            listaTrabajadores = await GetTrabajadores();
-            listaProductos = await GetProductos();
-
-            var viewmodel = new IngresosVista
-            {
-                NuevoIngreso = new TbIngreso(),
-                listaIngresos = lista,
-               // listaTrabajadores = listaTrabajadores,
-                //listaProductos = listaProductos
-            };
-
-            return View("Ingresos", viewmodel);
-        }
-
     }
-}
+

@@ -2,9 +2,6 @@
 {
     public class IngresosVista
     {
-        public TbIngreso NuevoIngreso { get; set; } = new TbIngreso();
-        public IEnumerable<TbIngreso> listaIngresos { get; set; } = Enumerable.Empty<TbIngreso>();
-        public IEnumerable<TbTrabajadore> listaTrabajadores { get; set; } = Enumerable.Empty<TbTrabajadore>();
-        public IEnumerable<TbProducto> listaProductos { get; set; } = Enumerable.Empty<TbProducto>();
+        public IEnumerable<PA_LISTAR_DETALLE_INGRESOS> listaDetaingresos { get; set; } = Enumerable.Empty<PA_LISTAR_DETALLE_INGRESOS>();
     }
 }

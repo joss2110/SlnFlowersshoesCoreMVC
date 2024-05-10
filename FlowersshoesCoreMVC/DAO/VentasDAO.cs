@@ -4,11 +4,11 @@ using System.Data.SqlClient;
 
 namespace FlowersshoesCoreMVC.DAO
 {
-    public class VentasDAO
+    public class VentassDAO
     {
         private string cad_cn = "";
 
-        public VentasDAO(IConfiguration cfg)
+        public VentassDAO(IConfiguration cfg)
         {
             cad_cn = cfg.GetConnectionString("cn1");
         }

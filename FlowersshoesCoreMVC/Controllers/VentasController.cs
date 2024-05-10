@@ -12,9 +12,9 @@ namespace FlowersshoesCoreMVC.Controllers
     public class VentasController : Controller
     {
         private readonly flowersshoesContext db;
-        private readonly VentasDAO dao;
+        private readonly VentassDAO dao;
 
-        public VentasController(flowersshoesContext ctx, VentasDAO _dao)
+        public VentasController(flowersshoesContext ctx, VentassDAO _dao)
         {
             db = ctx;
             dao = _dao;

@@ -1,0 +1,88 @@
+﻿@model FlowersshoesCoreMVC.Models.Vistas.IngresosVista
+
+@{
+    ViewData["Title"] = "Ingresos";
+}
+
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
+
+
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert bgRosa alert-dismissible fade show my-3" role="alert">
+        <strong>@TempData["mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+<form asp-action="AgregarCarrito" method="post">
+    <div class="d-flex justify-content-between mb-4">
+        @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
+        <button class="btn bgRosa"><i class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
+    </div>
+</form>
+
+
+
+
+<table class="table" id="tablaProductos">
+    <thead>
+        <tr>
+            <th>
+                Imagen
+            </th>
+            <th>
+                Modelo
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Talla
+            </th>
+            <th>
+                Cantidad
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listaDetaingresos)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"
+                         alt="@item.imagen" style="width:auto;height:80px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nompro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.talla)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cantidad)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+<form asp-action="GenerarVenta" method="post">
+    <div class="d-flex align-items-center">
+
+        <textarea name="descripcioningre" class="form-control" style="width: 100%;">@ViewBag.Descripcion</textarea>
+
+    </div>
+
+    <button class="btn bgRosa mt-5" style="width: 100%;">GENERAR VENTA</button>
+</form>

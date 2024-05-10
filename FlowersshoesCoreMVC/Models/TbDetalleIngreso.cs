@@ -8,10 +8,6 @@ namespace FlowersshoesCoreMVC.Models
         public int Idingre { get; set; }
         public int Idpro { get; set; }
         public int Cantidad { get; set; }
-        public string Imagen { get; set; }
-        public string Nompro { get; set; }
-        public string Color { get; set; }
-        public string Talla { get; set; }
 
         public virtual TbIngreso IdingreNavigation { get; set; } = null!;
         public virtual TbProducto IdproNavigation { get; set; } = null!;

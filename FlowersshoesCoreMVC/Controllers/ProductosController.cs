@@ -297,7 +297,7 @@ namespace FlowersshoesCoreMVC.Controllers
                     var nombreImagen = nuevoProducto.Nompro + nuevoProducto.Idtalla + nuevoProducto.Idcolor + ".jpg";
                     var rutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nombreImagen);
 
-                    // Se utiliza FileMode.Create para reemplazar el archivo si ya existe
+                    
                     using (var stream = new FileStream(rutaImagen, FileMode.Create))
                     {
                         await imagenInputEdit.CopyToAsync(stream);
