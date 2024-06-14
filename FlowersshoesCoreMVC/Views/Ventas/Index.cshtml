@@ -29,7 +29,12 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="nuevoCliente.Tipodocumento" class="control-label">Tipo de Docuemnto</label>
-                                <input asp-for="nuevoCliente.Tipodocumento" class="form-control" />
+                                <select asp-for="nuevoCliente.Tipodocumento" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+                                    <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
+                                </select>
                                 <span asp-validation-for="nuevoCliente.Tipodocumento" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -89,7 +94,12 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="nuevoCliente.Tipodocumento" class="control-label">Tipo de Docuemnto</label>
-                                <input asp-for="nuevoCliente.Tipodocumento" class="form-control" />
+                                <select asp-for="nuevoCliente.Tipodocumento" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+                                    <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
+                                </select>
                                 <span asp-validation-for="nuevoCliente.Tipodocumento" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -118,8 +128,11 @@
         </div>
     </div>
 </div>
-
 <h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Nueva Venta</h3>
+
+
+
+
 
 @if (TempData["mensaje"] != null)
 {
@@ -134,7 +147,7 @@
     <div class="d-flex align-items-center">
         @Html.TextBox("nrodoc", "", new { placeholder = "Ingresa nro de documento", @class = "form-control", style = "width: 300px;" })
         <button class="btn bgRosa ms-2"><i class="fa-solid fa-magnifying-glass" style="color: #dfb9c6;"></i></button>
-        <button type="button" class="btn bgRosa ms-2" data-bs-toggle="modal" data-bs-target="#CrearCli"><i class="fa-solid fa-plus fa-beat" style="color: #dfb9c;"></i></button>
+        <button type="button" class="btn bgRosa ms-2" data-bs-toggle="modal" data-bs-target="#CrearCli"><i class="fa-solid fa-plus fa-beat" style="color: #dfb9c6;"></i></button>
         <label class="ms-3 " style=" font-size: 1.2rem;"><b>Cliente:</b></label>
         <label class="ms-3 bgRosa px-3 py-2 rounded-pill" style=" font-size: 1.2rem;">@ViewBag.NombreCliente</label>
         @if (ViewBag.IdCliente != null)
@@ -144,16 +157,25 @@
     </div>
 </form>
  
+<form asp-action="LimpiarCarrito" method="post">
+    <div class="d-flex justify-content-between align-items-center mt-5 py-4 mb-4 border-top">
 
-<h4 class="text-center mt-5 py-4 mb-4 border-top">Agregar Productos al Carrito</h4>
+        <h4 class="text-center ">Agregar Productos al Carrito</h4>
+        <div>
+            <button class="btn bgRosa"><i class="fas fa-trash fa-beat" style="color: #dfb9c6; "></i></button>
+        </div>
+    </div>
+</form>
 
 
     <form asp-action="AgregarCarrito" method="post">
-        <div class="d-flex justify-content-between mb-4">
+        <div class="d-flex justify-content-between mb-4" style="width: 100% ;">
             @Html.TextBox("codbar", "", new { placeholder = "Ingresa codigo de barras", @class = "form-control", style = "width: calc(100% - 60px);" })
             <button class="btn bgRosa"><i class="fas fa-shopping-cart fa-beat" style="color: #dfb9c6;"></i></button>
         </div>
     </form>
+
+
 
 <table class="table" id="tablaProductos">
 <thead>
@@ -239,3 +261,24 @@
     </script>
 }
 
+
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador == 3)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

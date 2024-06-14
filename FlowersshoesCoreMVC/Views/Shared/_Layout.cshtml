@@ -26,26 +26,41 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                         <ul class="navbar-nav flex-grow-0">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Ventas" asp-action="Index" style="font-size: 1.2rem;color: black;"><i class="fa-solid fa-shopping-cart" style="color: #dfb9c6;"></i> &nbsp; Nueva Venta </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Ingresos" asp-action="NuevoIngreso" style="font-size: 1.2rem;color: black;"><i class="fa-solid fa-truck" style="color: #dfb9c6;"></i> &nbsp; Nuevo Ingreso </a>
-                            </li>
+                            @if (ViewBag.rolTrabajador == 1 || ViewBag.rolTrabajador == 2)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Ventas" asp-action="Index" style="font-size: 1.2rem;color: black;"><i class="fa-solid fa-shopping-cart" style="color: #dfb9c6;"></i> &nbsp; Nueva Venta </a>
+                                </li>
+                            }
+                            @if (ViewBag.rolTrabajador == 1 || ViewBag.rolTrabajador == 3)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Ingresos" asp-action="NuevoIngreso" style="font-size: 1.2rem;color: black;"><i class="fa-solid fa-truck" style="color: #dfb9c6;"></i> &nbsp; Nuevo Ingreso </a>
+                                </li>
+                            }
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.2rem;color: black;">
                                     <i class="fa-solid fa-screwdriver-wrench" style="color: #dfb9c6;"></i> &nbsp; Mantenimiento
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="border: 1px solid #ad85999c;">
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Colores" asp-action="Colores"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Colores </a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Clientes" asp-action="Clientes"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Clientes </a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Productos" asp-action="Productos"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Productos </a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Stocks" asp-action="Stocks"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Stocks </a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Tallas" asp-action="Tallas"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Tallas </a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Stocks" asp-action="Stocks"><i class="fa-solid fa-cubes" style="color: #dfb9c6;"></i> &nbsp; Stocks </a></li>
+                                    @if (ViewBag.rolTrabajador != 2)
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Colores" asp-action="Colores"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Colores </a></li>
+
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Productos" asp-action="Productos"><i class="fa-solid fa-shoe-prints" style="color: #dfb9c6;"></i> &nbsp; Productos </a></li>
+
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Tallas" asp-action="Tallas"><i class="fa-solid fa-tape" style="color: #dfb9c6;"></i> &nbsp; Tallas </a></li>
+
+                                    }
                                     @if (ViewBag.rolTrabajador == 1)
                                     {
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="Trabajadores" asp-action="Trabajadores"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Trabajadores </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Trabajadores" asp-action="Trabajadores"><i class="fa-solid fa-user-tie" style="color: #dfb9c6;"></i> &nbsp; Trabajadores </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Clientes" asp-action="Clientes"><i class="fa-solid fa-users" style="color: #dfb9c6;"></i> &nbsp; Clientes </a></li>
                                     }
+                                    
+
+                                   
 
                                 </ul>
                             </li>
@@ -53,22 +68,28 @@
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.2rem;color: black;">
-                                        <i class="fa-solid fa-screwdriver-wrench" style="color: #dfb9c6;"></i> &nbsp; Resportes
+                                        <i class="fa-solid fa-file-lines" style="color: #dfb9c6;"></i> &nbsp; Resportes
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="border: 1px solid #ad85999c;">
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="Ventas" asp-action="ReporteVentas"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Reporte de ventas </a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="Ingresos" asp-action="ReporteIngresos"><i class="fa-solid fa-palette" style="color: #dfb9c6;"></i> &nbsp; Reporte de Ingresos </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Ventas" asp-action="ReporteVentas"><i class="fa-solid fa-chart-line" style="color: #dfb9c6;"></i> &nbsp; Reporte de ventas </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Ingresos" asp-action="ReporteIngresos"><i class="fa-solid fa-file-invoice" style="color: #dfb9c6;"></i> &nbsp; Reporte de Ingresos </a></li>
                                     </ul>
 
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Login"><i class="fa-solid fa-right-from-bracket" style="color: #dfb9c6;"></i></a>
+                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Login" style="font-size: 1.2rem;color: black;"><i class="fa-solid fa-right-from-bracket" style="color: #dfb9c6;"></i> </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+            <div class=" w-100 py-1 m-1 " style=" background-color: rgba(242, 238, 235, 0.2)">
+                <div class="container d-flex justify-content-end">
+                    <span class="pe-3">Usuario: @ViewBag.NombresTrabajador </span>
+                </div>
+               
+            </div>
         </header>
     }
     

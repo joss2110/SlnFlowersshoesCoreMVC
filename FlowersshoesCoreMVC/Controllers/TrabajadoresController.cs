@@ -134,6 +134,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             listatra = await GetTrabajadores();

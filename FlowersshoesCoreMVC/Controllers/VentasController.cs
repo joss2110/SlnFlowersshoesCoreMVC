@@ -161,6 +161,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             VentasVista viewmodel;
@@ -311,6 +312,7 @@ namespace FlowersshoesCoreMVC.Controllers
         public IActionResult AgregarCarrito(string codbar)
         {
 
+
             if (codbar != null)
             {
                 TbProducto producto = db.TbProductos.FirstOrDefault(p => p.Codbar == codbar)!;
@@ -390,6 +392,49 @@ namespace FlowersshoesCoreMVC.Controllers
             }
 
             ViewBag.Total = sumaSubtotales;
+
+            clienteActual = RecuperarCliente()!;
+
+            if (clienteActual != null)
+            {
+                ViewBag.NombreCliente = clienteActual.Nomcli + " " + clienteActual.Apellidos;
+                ViewBag.IdCliente = clienteActual.Idcli;
+            }
+            else
+            {
+                ViewBag.NombreCliente = "Cliente no encontrado";
+            }
+
+            var viewmodel = new VentasVista
+            {
+                nuevoCliente = new TbCliente(),
+                listaDetaVenta = listacarrito
+            };
+
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+            }
+
+            return View("Index", viewmodel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LimpiarCarrito(string codbar)
+        {
+            listacarrito.Clear();
+            GrabarCarrito();
+          
+
+
+            listacarrito = RecuperarCarrito();
+
+
+            ViewBag.Total = 0;
 
             clienteActual = RecuperarCliente()!;
 
@@ -651,6 +696,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             ReporteVentasVista viewmodel;

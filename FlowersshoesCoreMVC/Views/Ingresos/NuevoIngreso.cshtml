@@ -4,7 +4,7 @@
     ViewData["Title"] = "Ingresos";
 }
 
-<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Mantenimiento</h3>
+<h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Nuevo Ingreso</h3>
 
 
 
@@ -16,8 +16,15 @@
     </div>
 }
 
-<hr />
 
+<form asp-action="LimpiarCarrito" method="post">
+    <div class="d-flex justify-content-between align-items-center mt-4 pt-0 pb-4 mb-4 border-bottom">
+        <h4 class="text-center ">Agregar Productos</h4>
+        <div>
+            <button class="btn bgRosa"><i class="fas fa-trash fa-beat" style="color: #dfb9c6; "></i></button>
+        </div>
+    </div>
+</form>
 
 
 
@@ -88,5 +95,27 @@
 
     </div>
 
-    <button type="submit" class="btn bgRosa mt-5" style="width: 100%;">GENERAR VENTA</button>
+    <button type="submit" class="btn bgRosa mt-5" style="width: 100%;">GENERAR INGRESO</button>
 </form>
+
+
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador == 2)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

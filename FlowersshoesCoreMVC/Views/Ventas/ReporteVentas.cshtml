@@ -73,7 +73,7 @@
                                 <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
                             </div>
 
-                            <div class="overflow-auto py-2 mb-4">
+                            <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -172,7 +172,7 @@
 
                                 <div class="form-group">
                                     <label asp-for="editventa.cliente" class="control-label">Cliente</label>
-                                    <input asp-for="editventa.cliente" class="form-control" />
+                                    <input asp-for="editventa.cliente" class="form-control" readonly />
                                     <span asp-validation-for="editventa.cliente" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -201,7 +201,7 @@
                                     <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
                                 </div>
 
-                                <div class="overflow-auto py-2 mb-4">
+                                <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -333,7 +333,7 @@
                                     <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
                                 </div>
 
-                                <div class="overflow-auto py-2 mb-4">
+                                <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -464,7 +464,7 @@
                                     <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
                                 </div>
 
-                                <div class="overflow-auto py-2 mb-4">
+                                <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -703,8 +703,8 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
 
         var fechaInput = $('#fechaFiltro').val();
 
-        var fechaHoy = new Date().toISOString().split('T')[0];
-        $('#fechaFiltro').val(fechaHoy);
+        var fechaHoy = obtenerHoraPeru().split('T')[0];
+        $('#fechaFiltro').val(fechaHoy); 
 
         function filtrarPorFecha() {
             var fechaInput = $('#fechaFiltro').val();
@@ -734,6 +734,17 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
             $('#totalVentas').text(totalVentas.toFixed(2));
         }
 
+        function obtenerHoraPeru() {
+            const now = new Date();
+            const offset = now.getTimezoneOffset();
+            const offsetInMs = offset * 60 * 1000;
+            const peruTime = new Date(now.getTime() - offsetInMs);
+            const peruOffset = -5 * 60;
+            const peruOffsetInMs = peruOffset * 60 * 1000;
+            const peruDate = new Date(peruTime.getTime() + peruOffsetInMs).toISOString();
+            return peruDate;
+        }
+
         filtrarPorFecha();
         $('#fechaFiltro').on('input', function () {
             filtrarPorFecha();
@@ -741,3 +752,23 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
 
     });
 </script>
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador != 1)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

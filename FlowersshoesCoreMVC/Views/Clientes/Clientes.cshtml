@@ -53,7 +53,7 @@
                                 <select asp-for="NuevoClientes.Tipodocumento" class="form-control">
                                     <option value="">Selecciona una opción</option>
                                     <option value="DNI">DNI</option>
-                                    <option value="Pasaporter">Pasaporter</option>
+                                    <option value="Pasaporte">Pasaporte</option>
                                     <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
                                 </select>
                                 <span asp-validation-for="NuevoClientes.Tipodocumento" class="text-danger"></span>
@@ -120,7 +120,7 @@
                                 <select asp-for="NuevoClientes.Tipodocumento" class="form-control">
                                     <option value="">Selecciona una opción</option>
                                     <option value="DNI">DNI</option>
-                                    <option value="Pasaporter">Pasaporter</option>
+                                    <option value="Pasaporte">Pasaporte</option>
                                     <option value="Carnet de Extrangeria">Carnet de Extrangeria</option>
                                 </select>
                                 <span asp-validation-for="NuevoClientes.Tipodocumento" class="text-danger"></span>
@@ -449,3 +449,23 @@ else if (ViewBag.abrirModal == "Restaurar")
         }
     });
 </script>
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador != 1)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

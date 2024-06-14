@@ -311,3 +311,23 @@ else if (ViewBag.abrirModal == "Restaurar")
         }
     });
 </script>
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador == 2)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

@@ -7,7 +7,7 @@
 <h3 class="text-center mt-5 pb-4 mb-4 border-bottom">Reportes</h3>
 
 <div class="d-flex justify-content-between">
-    <h4>Ventas</h4>
+    <h4>Ingresos</h4>
 </div>
 
 
@@ -24,7 +24,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ingreso</h5>
                     <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -58,10 +58,10 @@
                             </div>
 
                             <div class="py-4 border-bottom text-center">
-                                <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                <h6 class="modal-title" id="exampleModalLabel">Detalle de Ingreso</h6>
                             </div>
 
-                            <div class="overflow-auto py-2 mb-4" style="max-height:450px;">
+                            <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -122,7 +122,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ingreso</h5>
                     <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -157,10 +157,10 @@
                                 </div>
 
                                 <div class="py-4 border-bottom text-center">
-                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de Ingreso</h6>
                                 </div>
 
-                                <div class="overflow-auto py-2 mb-4" style="max-height:450px;">
+                                <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -226,7 +226,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ingreso</h5>
                     <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -261,10 +261,10 @@
                                 </div>
 
                                 <div class="py-4 border-bottom text-center">
-                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de Ingreso</h6>
                                 </div>
 
-                                <div class="overflow-auto py-2 mb-4" style="max-height:450px;">
+                                <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -328,7 +328,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Venta</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ingreso</h5>
                     <button id="btn-close-detalle" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -363,10 +363,10 @@
                                 </div>
 
                                 <div class="py-4 border-bottom text-center">
-                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de venta</h6>
+                                    <h6 class="modal-title" id="exampleModalLabel">Detalle de Ingreso</h6>
                                 </div>
 
-                                <div class="overflow-auto py-2 mb-4" style="max-height:450px;">
+                                <div class="overflow-auto py-2 mb-4" style="max-height:400px;">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -569,11 +569,9 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
 <script>
     $(document).ready(function () {
 
-
         var fechaInput = $('#fechaFiltro').val();
-
-        var fechaHoy = new Date().toISOString().split('T')[0];
-        $('#fechaFiltro').val(fechaHoy);
+        var fechaHoy = obtenerHoraPeru().split('T')[0];
+        $('#fechaFiltro').val(fechaHoy); 
 
         function filtrarPorFecha() {
             var fechaInput = $('#fechaFiltro').val();
@@ -602,8 +600,20 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
                 }
             });
 
-            // Mostrar el total de las ventas en el elemento con id "totalVentas"
+            
             $('#totalVentas').text(totalVentas.toFixed(2));
+        }
+
+
+        function  obtenerHoraPeru(){
+            const now = new Date();
+            const offset = now.getTimezoneOffset();
+            const offsetInMs = offset * 60 * 1000;
+            const peruTime = new Date(now.getTime() - offsetInMs);
+            const peruOffset = -5 * 60; 
+            const peruOffsetInMs = peruOffset * 60 * 1000;
+            const peruDate = new Date(peruTime.getTime() + peruOffsetInMs).toISOString();
+            return peruDate ;
         }
 
         filtrarPorFecha();
@@ -613,3 +623,25 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
 
     });
 </script>
+
+
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador != 1)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

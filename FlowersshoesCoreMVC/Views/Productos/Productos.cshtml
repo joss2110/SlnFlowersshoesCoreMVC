@@ -87,8 +87,16 @@
                                 <label asp-for="NuevoProductos.Categoria" class="control-label">Categoria</label>
                                 <select asp-for="NuevoProductos.Categoria"  class="form-control">
                                     <option value="">Seleccionar Categoria</option>
+                                    <option value="Zapatilla">Zapatilla</option>
+                                    <option value="Botín">Botín</option>
+                                    <option value="Estileto">Estileto</option>
+                                    <option value="Mocasín">Mocasín</option>
+                                    <option value="Bota">Bota</option>
+                                    <option value="Alpargata">Alpargata</option>
+                                    <option value="Oxford">Oxford</option>
+                                    <option value="Sueco">Sueco</option>
+                                    <option value="Mule">Mule</option>
                                     <option value="Sandalia">Sandalia</option>
-                                    <option value="Balerina">Balerina</option>
                                 </select>
                                 <span asp-validation-for="NuevoProductos.Categoria" class="text-danger"></span>
                             </div>
@@ -197,8 +205,16 @@
                                 <label asp-for="NuevoProductos.Categoria" class="control-label">Categoria</label>
                                 <select asp-for="NuevoProductos.Categoria" class="form-control">
                                     <option value="">Seleccionar Categoria</option>
+                                    <option value="Zapatilla">Zapatilla</option>
+                                    <option value="Botín">Botín</option>
+                                    <option value="Estileto">Estileto</option>
+                                    <option value="Mocasín">Mocasín</option>
+                                    <option value="Bota">Bota</option>
+                                    <option value="Alpargata">Alpargata</option>
+                                    <option value="Oxford">Oxford</option>
+                                    <option value="Sueco">Sueco</option>
+                                    <option value="Mule">Mule</option>
                                     <option value="Sandalia">Sandalia</option>
-                                    <option value="Balerina">Balerina</option>
                                 </select>
                                 <span asp-validation-for="NuevoProductos.Categoria" class="text-danger"></span>
                             </div>
@@ -528,7 +544,7 @@ else if (ViewBag.abrirModal == "Restaurar")
 
         var filtroActual = '';
 
-        $('#filtroColor').on('input', function () {
+        $('#filtroProducto').on('input', function () {
             filtroActual = $(this).val().toLowerCase();
             filtrarFilas();
         });
@@ -536,8 +552,8 @@ else if (ViewBag.abrirModal == "Restaurar")
         $('#toggleInactive').on('click', function () {
             var iconoMostrar = $('#iconoMostrar');
             var ocultarInactivos = !$(this).hasClass('activo');
-            $('#tablaColores tbody tr').each(function () {
-                var estado = $(this).find('td:nth-child(3)').text().trim();
+            $('#tablaProductos tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(11)').text().trim();
                 if (estado === 'Inactivo') {
                     $(this).toggle(ocultarInactivos);
                 }
@@ -552,8 +568,8 @@ else if (ViewBag.abrirModal == "Restaurar")
         });
 
         function filtrarFilas() {
-            $('#tablaColores tbody tr').each(function () {
-                var estado = $(this).find('td:nth-child(3)').text().trim();
+            $('#tablaProductos tbody tr').each(function () {
+                var estado = $(this).find('td:nth-child(11)').text().trim();
                 var cumpleFiltro = true;
                 if (filtroActual !== '') {
                     cumpleFiltro = $(this).find('td:nth-child(2)').text().toLowerCase().indexOf(filtroActual) > -1;
@@ -578,3 +594,36 @@ else if (ViewBag.abrirModal == "Restaurar")
         reader.readAsDataURL(archivo);
     });
 </script>
+<script>
+    $('#imagenInput').change(function (event) {
+        var archivo = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var vistaPrevia = $('#vistaPreviaImagen');
+            vistaPrevia.html('<img src="' + e.target.result + '" class="img-thumbnail" />');
+        };
+
+        reader.readAsDataURL(archivo);
+    });
+</script>
+
+@if (ViewBag.trabajador == null)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Login/Login';
+
+        });
+    </script>
+}
+else if (ViewBag.rolTrabajador == 2)
+{
+    <script>
+        $(document).ready(function () {
+
+            window.location.href = '/Ingresos/NuevoIngreso';
+
+        });
+    </script>
+}

@@ -80,6 +80,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             IngresosVista viewmodel;
@@ -118,19 +119,26 @@ namespace FlowersshoesCoreMVC.Controllers
                 };
                 lista.Add(di);
             }
-
-            try
+            if(descripcioningre != null)
             {
-                TempData["mensaje"] = dao.GererarIngreso(trabajadorActual.Idtra, descripcioningre, lista);
+                try
+                {
+                    TempData["mensaje"] = dao.GererarIngreso(trabajadorActual.Idtra, descripcioningre, lista);
 
-                listacarrito.Clear();
-                GrabarCarrito();
-                ViewBag.Descripcion = "";
+                    listacarrito.Clear();
+                    GrabarCarrito();
+                    ViewBag.Descripcion = "";
+                }
+                catch (Exception ex)
+                {
+                    TempData["mensaje"] = ex.Message;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                TempData["mensaje"] = ex.Message;
+                TempData["mensaje"] = "ingrese una descripcion";
             }
+           
 
 
             listacarrito = RecuperarCarrito();
@@ -146,6 +154,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             return View("NuevoIngreso", viewmodel);
@@ -217,11 +226,38 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             return View("NuevoIngreso", viewmodel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LimpiarCarrito(string codbar)
+        {
+            listacarrito.Clear();
+            GrabarCarrito();
+
+
+            listacarrito = RecuperarCarrito();
+
+            var viewmodel = new IngresosVista
+            {
+                listaDetaingresos = listacarrito
+            };
+
+            trabajadorActual = RecuperarTrabajador()!;
+
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
+            }
+
+            return View("NuevoIngreso", viewmodel);
+        }
         public ActionResult ReporteIngresos(int idingre, string accion)
         {
             trabajadorActual = RecuperarTrabajador()!;
@@ -230,6 +266,7 @@ namespace FlowersshoesCoreMVC.Controllers
             {
                 ViewBag.trabajador = trabajadorActual;
                 ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
             }
 
             List<PA_LISTAR_INGRESOS> listai = dao.listarIngresos();
