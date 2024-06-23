@@ -571,7 +571,7 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
 
         var fechaInput = $('#fechaFiltro').val();
         var fechaHoy = obtenerHoraPeru().split('T')[0];
-        $('#fechaFiltro').val(fechaHoy); 
+        $('#fechaFiltro').val(fechaHoy);
 
         function filtrarPorFecha() {
             var fechaInput = $('#fechaFiltro').val();
@@ -600,20 +600,20 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
                 }
             });
 
-            
+
             $('#totalVentas').text(totalVentas.toFixed(2));
         }
 
 
-        function  obtenerHoraPeru(){
+        function obtenerHoraPeru() {
             const now = new Date();
             const offset = now.getTimezoneOffset();
             const offsetInMs = offset * 60 * 1000;
             const peruTime = new Date(now.getTime() - offsetInMs);
-            const peruOffset = -5 * 60; 
+            const peruOffset = -5 * 60;
             const peruOffsetInMs = peruOffset * 60 * 1000;
             const peruDate = new Date(peruTime.getTime() + peruOffsetInMs).toISOString();
-            return peruDate ;
+            return peruDate;
         }
 
         filtrarPorFecha();
@@ -623,7 +623,6 @@ else if (ViewBag.abrirModal == "RestaurarVenta")
 
     });
 </script>
-
 
 @if (ViewBag.trabajador == null)
 {
