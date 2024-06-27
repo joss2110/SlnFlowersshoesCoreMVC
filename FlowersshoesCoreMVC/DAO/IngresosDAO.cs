@@ -133,6 +133,11 @@ namespace FlowersshoesCoreMVC.DAO
 
         }
 
+        public List<PA_LISTAR_INGRESOS> Exportar_Ingresos()
+        {
+            return listarIngresos();
+        }
+
         public string RestaurarIngre(int idingre, List<TbDetalleIngreso> detaIngre)
         {
             string mensaje = "";

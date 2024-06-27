@@ -90,7 +90,7 @@ namespace FlowersshoesCoreMVC.DAO
 
             return lista;
         }
-
+       
         public List<PA_LISTAR_DETALLE_VENTAS> listarDetaVentas(int idventa)
         {
             List<PA_LISTAR_DETALLE_VENTAS> lista = new List<PA_LISTAR_DETALLE_VENTAS>();
@@ -164,9 +164,9 @@ namespace FlowersshoesCoreMVC.DAO
             return mensaje;
 
         }
-
-
-
-
+        public List<PA_LISTAR_VENTAS> Exportar_Ventas()
+        {
+            return listarVentas();
+        }
     }
 }

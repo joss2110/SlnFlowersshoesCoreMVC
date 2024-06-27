@@ -9,6 +9,7 @@ using System.Net.Http;
 using FlowersshoesCoreMVC.DAO;
 using System.Collections.Generic;
 using System;
+using ClosedXML.Excel;
 
 
 namespace FlowersshoesCoreMVC.Controllers
@@ -442,6 +443,38 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
 
+        public IActionResult ExportarIngresosExcel()
+        {
+            var ingresos = dao.Exportar_Ingresos();
+
+            using (var libro = new XLWorkbook())
+            {
+                var hoja = libro.Worksheets.Add("Ingresos");
+                hoja.Cell(1, 1).Value = "ID";
+                hoja.Cell(1, 2).Value = "Trabajador";
+                hoja.Cell(1, 3).Value = "Fecha";
+                hoja.Cell(1, 4).Value = "Descripción";
+                hoja.Cell(1, 5).Value = "Estado";
+
+                for (int i = 0; i < ingresos.Count; i++)
+                {
+                    hoja.Cell(i + 2, 1).Value = ingresos[i].idingre;
+                    hoja.Cell(i + 2, 2).Value = ingresos[i].trabajador;
+                    hoja.Cell(i + 2, 3).Value = ingresos[i].fecha;
+                    hoja.Cell(i + 2, 4).Value = ingresos[i].descripcion;
+                    hoja.Cell(i + 2, 5).Value = ingresos[i].estado;
+                }
+
+                hoja.ColumnsUsed().AdjustToContents();
+
+                using (var memoria = new MemoryStream())
+                {
+                    libro.SaveAs(memoria);
+                    var nombreExcel = string.Concat("Reporte_Ingresos_", DateTime.Now.ToString("yyyyMMdd_HHmmss"), ".xlsx");
+                    return File(memoria.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", nombreExcel);
+                }
+            }
+        }
 
 
 

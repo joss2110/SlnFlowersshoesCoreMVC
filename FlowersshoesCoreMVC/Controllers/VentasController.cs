@@ -1,4 +1,6 @@
-﻿using FlowersshoesCoreMVC.DAO;
+﻿using ClosedXML.Excel;
+using 
+    FlowersshoesCoreMVC.DAO;
 using FlowersshoesCoreMVC.Models;
 using FlowersshoesCoreMVC.Models.Vistas;
 using Microsoft.AspNetCore.Mvc;
@@ -877,6 +879,41 @@ namespace FlowersshoesCoreMVC.Controllers
 
             return View("ReporteVentas", viewmodel);
         }
+        public IActionResult ExportarVentasExcel()
+        {
+            var ventas = dao.Exportar_Ventas();
 
+            using (var libro = new XLWorkbook())
+            {
+                var hoja = libro.Worksheets.Add("Ventas");
+                hoja.Cell(1, 1).Value = "ID";
+                hoja.Cell(1, 2).Value = "Trabajador";
+                hoja.Cell(1, 3).Value = "Cliente";
+                hoja.Cell(1, 4).Value = "Fecha";
+                hoja.Cell(1, 5).Value = "Total";
+                hoja.Cell(1, 6).Value = "Estado Comprobante";
+                hoja.Cell(1, 7).Value = "Estado";
+
+                for (int i = 0; i < ventas.Count; i++)
+                {
+                    hoja.Cell(i + 2, 1).Value = ventas[i].idventa;
+                    hoja.Cell(i + 2, 2).Value = ventas[i].trabajador;
+                    hoja.Cell(i + 2, 3).Value = ventas[i].cliente;
+                    hoja.Cell(i + 2, 4).Value = ventas[i].fecha;
+                    hoja.Cell(i + 2, 5).Value = ventas[i].total;
+                    hoja.Cell(i + 2, 6).Value = ventas[i].estadoComprobante;
+                    hoja.Cell(i + 2, 6).Value = ventas[i].estado;
+                }
+
+                hoja.ColumnsUsed().AdjustToContents();
+
+                using (var memoria = new MemoryStream())
+                {
+                    libro.SaveAs(memoria);
+                    var nombreExcel = string.Concat("Reporte_Ventas_", DateTime.Now.ToString("yyyyMMdd_HHmmss"), ".xlsx");
+                    return File(memoria.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", nombreExcel);
+                }
+            }
+        }
     }
 }
