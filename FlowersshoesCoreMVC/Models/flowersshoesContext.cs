@@ -24,7 +24,6 @@ namespace FlowersshoesCoreMVC.Models
         public virtual DbSet<TbProducto> TbProductos { get; set; } = null!;
         public virtual DbSet<TbRole> TbRoles { get; set; } = null!;
         public virtual DbSet<TbStock> TbStocks { get; set; } = null!;
-        public virtual DbSet<TbTalla> TbTallas { get; set; } = null!;
         public virtual DbSet<TbTrabajadore> TbTrabajadores { get; set; } = null!;
         public virtual DbSet<TbVenta> TbVentas { get; set; } = null!;
 
@@ -225,7 +224,7 @@ namespace FlowersshoesCoreMVC.Models
 
                 entity.Property(e => e.Idcolor).HasColumnName("idcolor");
 
-                entity.Property(e => e.Idtalla).HasColumnName("idtalla");
+                entity.Property(e => e.talla).HasColumnName("talla");
 
                 entity.Property(e => e.Imagen)
                     .HasMaxLength(150)
@@ -252,11 +251,7 @@ namespace FlowersshoesCoreMVC.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__tb_produc__idcol__412EB0B6");
 
-                entity.HasOne(d => d.IdtallaNavigation)
-                    .WithMany(p => p.TbProductos)
-                    .HasForeignKey(d => d.Idtalla)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tb_produc__idtal__403A8C7D");
+               
             });
 
             modelBuilder.Entity<TbRole>(entity =>
@@ -294,20 +289,7 @@ namespace FlowersshoesCoreMVC.Models
                     .HasConstraintName("FK__tb_stocks__idpro__440B1D61");
             });
 
-            modelBuilder.Entity<TbTalla>(entity =>
-            {
-                entity.HasKey(e => e.Idtalla)
-                    .HasName("PK__tb_talla__8B6518C8C0C55DD0");
-
-                entity.ToTable("tb_tallas");
-
-                entity.Property(e => e.Idtalla).HasColumnName("idtalla");
-
-                entity.Property(e => e.Talla)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("talla");
-            });
+            
 
             modelBuilder.Entity<TbTrabajadore>(entity =>
             {

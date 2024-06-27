@@ -7,7 +7,7 @@
         public string imagen { get; set; } = string.Empty;
         public string nompro { get; set; } = string.Empty;
         public decimal precio { get; set; }
-        public string talla { get; set; } = string.Empty;
+        public int talla { get; set; } 
         public string color { get; set; } = string.Empty;
         public string categoria { get; set; } = string.Empty;
         public string temporada { get; set; } = string.Empty;

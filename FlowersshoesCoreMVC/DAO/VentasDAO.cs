@@ -105,7 +105,7 @@ namespace FlowersshoesCoreMVC.DAO
                 detaventa.imagen = rd.GetString(1);
                 detaventa.nompro = rd.GetString(2);
                 detaventa.color = rd.GetString(3);
-                detaventa.talla = rd.GetString(4);
+                detaventa.talla = rd.GetInt32(4);
                 detaventa.cantidad = rd.GetInt32(5);
                 detaventa.Preciouni = rd.GetDecimal(6);
                 detaventa.Subtotal = rd.GetDecimal(7);

@@ -139,21 +139,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
 
 
-        public async Task<List<TbTalla>> traerTallas()
-        {
-            // permite realizar una solicitud al servicio web api
-            using (var httpcliente = new HttpClient())
-            {
-                // realizamos una solicitud Get
-                var respuesta =
-                    await httpcliente.GetAsync(
-                        "http://localhost:5050/api/Tallas/GetTallas");
-                // convertimos el contenido de la variable respuesta a una cadena
-                string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
-
-                return JsonConvert.DeserializeObject<List<TbTalla>>(respuestaAPI)!;
-            }
-        }
+       
 
 
         public async Task<List<TbColores>> traerColores()
@@ -209,8 +195,6 @@ namespace FlowersshoesCoreMVC.Controllers
                 ViewBag.abrirModal = accion;
             }
 
-            ViewBag.tallas =
-               new SelectList(await traerTallas(), "Idtalla", "Talla");
             //
             ViewBag.color =
                 new SelectList(await traerColores(), "Idcolor", "Color");
@@ -232,10 +216,11 @@ namespace FlowersshoesCoreMVC.Controllers
                 
                 if (imagenInput.ContentType.StartsWith("image/"))
                 {
-                    
-                    var nombreImagen = nuevoProducto.Nompro+nuevoProducto.Idtalla+nuevoProducto.Idcolor+".jpg";
 
-                   
+                    var nombreImagen = (nuevoProducto.Nompro + nuevoProducto.Idcolor + ".jpg").ToLower();
+
+
+
                     var rutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nombreImagen);
 
                     
@@ -272,8 +257,6 @@ namespace FlowersshoesCoreMVC.Controllers
                 NuevoProductos = new TbProducto(),
                 listaProductos = lista
             };
-            ViewBag.tallas =
-               new SelectList(await traerTallas(), "Idtalla", "Talla");
             //
             ViewBag.color =
                 new SelectList(await traerColores(), "Idcolor", "Color");
@@ -295,7 +278,7 @@ namespace FlowersshoesCoreMVC.Controllers
                 if (imagenInputEdit.ContentType.StartsWith("image/"))
                 {
 
-                    var nombreImagen = nuevoProducto.Nompro + nuevoProducto.Idtalla + nuevoProducto.Idcolor + ".jpg";
+                    var nombreImagen = (nuevoProducto.Nompro + nuevoProducto.Idcolor + ".jpg").ToLower();
                     var rutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nombreImagen);
 
                     
@@ -331,7 +314,7 @@ namespace FlowersshoesCoreMVC.Controllers
 
                 if (System.IO.File.Exists(rutaImagenAnterior))
                 {
-                    var nuevoNombreImagen = nuevoProducto.Nompro + nuevoProducto.Idtalla + nuevoProducto.Idcolor + ".jpg";
+                    var nuevoNombreImagen = (nuevoProducto.Nompro + nuevoProducto.Idcolor + ".jpg").ToLower();
                     var nuevaRutaImagen = Path.Combine(_env.WebRootPath, "ImagenesProductos", nuevoNombreImagen);
 
                     System.IO.File.Move(rutaImagenAnterior, nuevaRutaImagen);
@@ -351,8 +334,6 @@ namespace FlowersshoesCoreMVC.Controllers
                 NuevoProductos = new TbProducto(),
                 listaProductos = lista
             };
-            ViewBag.tallas =
-              new SelectList(await traerTallas(), "Idtalla", "Talla");
             //
             ViewBag.color =
                 new SelectList(await traerColores(), "Idcolor", "Color");

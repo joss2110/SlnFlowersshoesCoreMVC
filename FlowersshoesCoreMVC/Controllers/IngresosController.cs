@@ -181,7 +181,7 @@ namespace FlowersshoesCoreMVC.Controllers
                             idpro = producto.Idpro,
                             nompro = producto.Nompro,
                             color = db.TbColores.Find(producto.Idcolor)!.Color,
-                            talla = db.TbTallas.Find(producto.Idtalla)!.Talla,
+                            talla = producto.talla!,
                             cantidad = 1,
                         };
                         listacarrito.Add(ldv);

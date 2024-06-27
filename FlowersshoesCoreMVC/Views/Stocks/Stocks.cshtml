@@ -27,6 +27,9 @@
                 Id Stock
             </th>
             <th>
+                Codigo de barras
+            </th>
+            <th>
                 Imagen
             </th>
             <th>
@@ -50,6 +53,9 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.idstock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.codbar)
                 </td>
                 <td>
                     <img src="@Url.Content("/ImagenesProductos/"+ item.imagen)"

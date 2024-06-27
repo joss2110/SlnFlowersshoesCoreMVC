@@ -99,7 +99,7 @@ namespace FlowersshoesCoreMVC.DAO
                 detaingre.imagen = rd.GetString(1);
                 detaingre.nompro = rd.GetString(2);
                 detaingre.color = rd.GetString(3);
-                detaingre.talla = rd.GetString(4);
+                detaingre.talla = rd.GetInt32(4);
                 detaingre.cantidad = rd.GetInt32(5);
 
                 lista.Add(detaingre);
