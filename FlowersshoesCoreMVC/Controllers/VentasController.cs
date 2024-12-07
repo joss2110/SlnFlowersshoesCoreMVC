@@ -72,6 +72,35 @@ namespace FlowersshoesCoreMVC.Controllers
             return cadena;
         }
 
+        public async Task<TbCliente> obtenerCliente(string dni)
+        {
+            TbCliente cliente = null;
+
+            using (var httpcliente = new HttpClient())
+            {
+                string url = $"http://localhost:5050/api/Clientes/GetCliente/{dni}";
+
+                // Enviar una solicitud GET
+                HttpResponseMessage respuesta = await httpcliente.GetAsync(url);
+
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    // Leer la respuesta si la solicitud fue exitosa
+                    string respuestaAPI = await respuesta.Content.ReadAsStringAsync();
+
+                    // Deserializar el JSON a un objeto de tipo Clientes
+                    cliente = JsonConvert.DeserializeObject<TbCliente>(respuestaAPI);
+                }
+                else
+                {
+                    // Manejo de errores (puedes personalizar esto según tu lógica)
+                    Console.WriteLine($"Error: {respuesta.StatusCode} - {respuesta.ReasonPhrase}");
+                }
+            }
+
+            return cliente;
+        }
+
         public async Task<string> EditarCliente(TbCliente obj)
         {
             string cadena = string.Empty;
@@ -226,6 +255,12 @@ namespace FlowersshoesCoreMVC.Controllers
             clienteActual = RecuperarCliente()!;
             listacarrito = RecuperarCarrito();
             trabajadorActual = RecuperarTrabajador()!;
+            if (trabajadorActual != null)
+            {
+                ViewBag.trabajador = trabajadorActual;
+                ViewBag.rolTrabajador = trabajadorActual.Idrol;
+                ViewBag.NombresTrabajador = trabajadorActual.Nombres;
+            }
 
 
             if (clienteActual != null && listacarrito.Count > 0)
@@ -534,7 +569,11 @@ namespace FlowersshoesCoreMVC.Controllers
                     TbCliente nuevoCliente = model.nuevoCliente;
 
                     TempData["mensaje"] = await crearCliente(nuevoCliente);
-
+                    if(nuevoCliente.Nrodocumento != null)
+                    {
+                        nuevoCliente = await obtenerCliente( nuevoCliente.Nrodocumento);
+                    }
+                    
                     HttpContext.Session.SetString("cliente", JsonConvert.SerializeObject(nuevoCliente));
 
                     clienteActual = RecuperarCliente()!;
